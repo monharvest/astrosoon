@@ -25,9 +25,11 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     <title>{title}</title>
     <meta name="description" content={description} />
     {metaImage && <meta property="og:image" content={metaImage} />}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/_astro/articles.DnAAtpLu.css" as="style" />
+    
+    <!-- Local font CSS -->
+    <link rel="stylesheet" href="/src/styles/fonts.css" />
   </head>
   <body class="min-h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans">
     <slot name="header" />
