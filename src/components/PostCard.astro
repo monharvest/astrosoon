@@ -13,7 +13,7 @@ const categorySlug = slugify(post.data.category);
 ---
 <article class="card h-full flex flex-col overflow-hidden post-card" data-category={categorySlug}>
   <a href={`/posts/${post.slug}`} class="block">
-    <figure class="relative h-40 w-full overflow-hidden">
+    <figure class="relative h-40 w-full overflow-hidden rounded-t-xl">
       <Image src={imageSrc} alt={post.data.title} class="h-full w-full object-cover transition duration-200 hover:scale-105" loading={index < 3 ? "eager" : "lazy"} width={400} height={160} />
     </figure>
   </a>
