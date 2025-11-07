@@ -6,6 +6,6 @@ const { posts } = Astro.props as { posts: CollectionEntry<'posts'>[] };
 <section class="mt-6">
   <h2 class="text-xl font-semibold mb-4">Нийтлэлүүд</h2>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {posts.map((p) => <PostCard post={p} />)}
+    {posts.map((p, index) => <PostCard post={p} index={index} />)}
   </div>
 </section>

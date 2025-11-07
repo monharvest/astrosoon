@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Allow all major search engines to crawl the site
+# Block access to admin areas if they exist in the future
+# Disallow: /admin/
+# Disallow: /private/
+
+# Sitemap location
+Sitemap: https://astrosoon.pages.dev/sitemap.xml
