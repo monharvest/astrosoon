@@ -14,7 +14,25 @@ const categorySlug = slugify(post.data.category);
 <article class="card h-full flex flex-col overflow-hidden post-card" data-category={categorySlug}>
   <a href={`/posts/${post.slug}`} class="block">
     <figure class="relative h-40 w-full overflow-hidden rounded-t-xl">
-      <Image src={imageSrc} alt={post.data.title} class="h-full w-full object-cover transition duration-200 hover:scale-105" loading={index < 3 ? "eager" : "lazy"} fetchpriority={index === 0 ? "high" : undefined} width={400} height={160} />
+      <picture>
+        <source
+          srcset={`${imageSrc}?q=80&w=665&auto=format&fit=crop&fm=webp 1x, ${imageSrc}?q=80&w=1330&auto=format&fit=crop&fm=webp 2x`}
+          type="image/webp"
+        />
+        <source
+          srcset={`${imageSrc}?q=80&w=665&auto=format&fit=crop 1x, ${imageSrc}?q=80&w=1330&auto=format&fit=crop 2x`}
+          type="image/jpeg"
+        />
+        <Image 
+          src={`${imageSrc}?q=80&w=665&auto=format&fit=crop`}
+          alt={post.data.title}
+          class="h-full w-full object-cover transition duration-200 hover:scale-105"
+          loading={index < 3 ? "eager" : "lazy"}
+          fetchpriority={index === 0 ? "high" : undefined}
+          width={665}
+          height={444}
+        />
+      </picture>
     </figure>
   </a>
 
