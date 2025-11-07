@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import PostGrid from '../components/PostGrid.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+const sorted = posts.sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate));
+const featured = sorted.find((p) => p.data.featured) ?? sorted[0];
+---
+<BaseLayout title="Udaxgui.com" description="Итгэл, найдвар, хайр — нийтлэлүүд">
+  <Fragment slot="header"><Header /></Fragment>
+  <Fragment slot="hero"><Hero post={featured} /></Fragment>
+
+  <PostGrid posts={sorted.filter((p) => p.slug !== featured.slug)} />
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

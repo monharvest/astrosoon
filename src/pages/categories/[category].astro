@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '../../utils/slug';
+
+export async function getStaticPaths() {
+  const all = await getCollection('posts');
+  const categories = Array.from(new Set(all.map((p) => slugify(p.data.category))));
+  return categories.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const all = await getCollection('posts');
+const active = all.filter((p) => slugify(p.data.category) === category);
+---
+<BaseLayout title={`Ангилал: ${category}`}>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <div class="my-8">
+    <h1 class="text-2xl font-semibold">Ангилал: {active[0]?.data.category ?? category}</h1>
+  </div>
+
+  <PostGrid posts={active} />
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { categoryClasses } from '../../utils/categoryStyles';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({ params: { slug: post.slug } }));
+}
+
+const posts = await getCollection('posts');
+const post = posts.find((p) => p.slug === Astro.params.slug)!;
+const { Content } = await post.render();
+const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
+---
+<BaseLayout title={post.data.title} description={post.data.description} metaImage={post.data.heroImage}>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <article class="mx-auto max-w-3xl my-10">
+    <header class={`rounded-2xl overflow-hidden bg-gradient-to-r ${gradient} p-6 text-white`}>
+      <div class="badge text-xs">{post.data.category}</div>
+      <h1 class="mt-3 text-3xl font-semibold">{post.data.title}</h1>
+      <div class="mt-2 text-sm text-white/85">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
+    </header>
+
+    {post.data.heroImage && (
+      <div class="mt-6 aspect-video relative rounded-2xl overflow-hidden">
+        <img 
+          src={post.data.heroImage} 
+          alt={post.data.title} 
+          class="absolute w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <div class="prose prose-slate dark:prose-invert prose-img:rounded-xl mt-6 max-w-none">
+      <div class="content">
+        <Content />
+      </div>
+    </div>
+
+    <style>
+      .content :global(h1) {
+        @apply text-3xl font-bold mt-10 mb-6;
+      }
+      .content :global(h2) {
+        @apply text-2xl font-semibold mt-8 mb-4 border-b pb-2 border-gray-200 dark:border-gray-800;
+      }
+      .content :global(h3) {
+        @apply text-xl font-semibold mt-6 mb-3;
+      }
+      .content :global(p) {
+        @apply mb-4 leading-relaxed text-gray-700 dark:text-gray-300;
+      }
+      .content :global(ul) {
+        @apply list-disc pl-6 mb-4 text-gray-700 dark:text-gray-300 space-y-2;
+      }
+      .content :global(ol) {
+        @apply list-decimal pl-6 mb-4 text-gray-700 dark:text-gray-300 space-y-2;
+      }
+      .content :global(blockquote) {
+        @apply border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-6 text-gray-600 dark:text-gray-400;
+      }
+      .content :global(pre) {
+        @apply rounded-xl p-4 overflow-x-auto mb-4 bg-gray-100 dark:bg-gray-800 text-sm;
+      }
+      .content :global(code) {
+        @apply bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono;
+      }
+      .content :global(a) {
+        @apply text-blue-600 dark:text-blue-400 hover:underline decoration-2 underline-offset-2;
+      }
+      .content :global(img) {
+        @apply rounded-xl my-6 w-full shadow-lg;
+      }
+      .content :global(table) {
+        @apply w-full border-collapse mb-6;
+      }
+      .content :global(th),
+      .content :global(td) {
+        @apply border border-gray-300 dark:border-gray-700 px-4 py-2;
+      }
+      .content :global(th) {
+        @apply bg-gray-100 dark:bg-gray-800;
+      }
+      .content :global(tr) {
+        @apply even:bg-gray-50 dark:even:bg-gray-900;
+      }
+      .content :global(hr) {
+        @apply my-8 border-gray-200 dark:border-gray-800;
+      }
+      .content :global(strong) {
+        @apply font-semibold text-gray-900 dark:text-white;
+      }
+      .content :global(em) {
+        @apply text-gray-800 dark:text-gray-200;
+      }
+    </style>
+  </article>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

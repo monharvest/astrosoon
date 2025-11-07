@@ -1,0 +1,40 @@
+---
+const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын тухай нийтлэлүүд', metaImage } = Astro.props;
+---
+<html lang="mn" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {metaImage && <meta property="og:image" content={metaImage} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans">
+    <slot name="header" />
+    <slot name="hero" />
+    <main class="max-w-[1200px] mx-auto px-4 sm:px-6 pb-16">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
