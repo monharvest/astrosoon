@@ -4,5 +4,9 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://astrosoon.pages.dev',
-  integrations: [tailwind(), sitemap()]
+  integrations: [tailwind(), sitemap()],
+  image: {
+    domains: ['images.unsplash.com'],
+    remotePatterns: [{ protocol: 'https' }]
+  }
 });
