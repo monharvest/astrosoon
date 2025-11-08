@@ -12,13 +12,13 @@ const imageSrc = post.data.heroImage ?? fallbackImage;
 const categorySlug = slugify(post.data.category);
 ---
 <article class="card h-full flex flex-col overflow-hidden post-card" data-category={categorySlug}>
-  <a href={`/posts/${post.slug}`} class="block">
+  <a href={`/posts/${post.slug}`} class="block overflow-hidden">
     <SmartPicture
       src={imageSrc}
       alt={post.data.title}
       widths={[320, 480, 640, 768, 960]}
       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-      aspect="3/2"
+      height="h-48"
       quality={58}
       loading={index < 3 ? 'eager' : 'lazy'}
       fetchpriority={index === 0 ? 'high' : 'auto'}

@@ -43,16 +43,6 @@ const categories = [
             </svg>
           </form>
         </div>
-
-        <button id="theme-toggle" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Toggle theme">
-          <svg id="sun-icon" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          <svg id="moon-icon" class="hidden h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        </button>
       </div>
     </div>
 
@@ -74,16 +64,6 @@ const categories = [
         <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Toggle menu">
           <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-
-        <button id="theme-toggle-mobile" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Toggle theme">
-          <svg id="sun-icon-mobile" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          <svg id="moon-icon-mobile" class="hidden h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
       </div>
@@ -124,38 +104,6 @@ const categories = [
 </header>
 
 <script>
-  // Initialize theme toggle state
-  const setThemeToggleState = () => {
-    const sunIcons = document.querySelectorAll('#sun-icon, #sun-icon-mobile');
-    const moonIcons = document.querySelectorAll('#moon-icon, #moon-icon-mobile');
-    
-    const isDark = document.documentElement.classList.contains('dark');
-    
-    sunIcons.forEach(icon => icon.classList.toggle('hidden', isDark));
-    moonIcons.forEach(icon => icon.classList.toggle('hidden', !isDark));
-  };
-
-  // Set initial state
-  setThemeToggleState();
-
-  // Handle theme toggle click
-  document.querySelectorAll('#theme-toggle, #theme-toggle-mobile').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      document.documentElement.classList.toggle('dark', !isDark);
-      localStorage.setItem('theme', isDark ? 'light' : 'dark');
-      setThemeToggleState();
-    });
-  });
-
-  // Handle system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      document.documentElement.classList.toggle('dark', e.matches);
-      setThemeToggleState();
-    }
-  });
-
   // Mobile menu toggle
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');

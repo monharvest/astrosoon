@@ -27,8 +27,8 @@ const relatedPosts = posts
 
   <article class="mx-auto max-w-3xl my-10">
     <header class="p-6">
-      <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">{post.data.title}</h1>
-      <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
+      <h1 class="text-3xl font-semibold text-gray-900">{post.data.title}</h1>
+      <div class="mt-2 text-sm text-gray-600">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
     </header>
 
     {post.data.heroImage && (
@@ -44,7 +44,7 @@ const relatedPosts = posts
       </div>
     )}
 
-    <div class="prose prose-slate dark:prose-invert prose-img:rounded-xl mt-6 max-w-none">
+    <div class="prose prose-slate prose-img:rounded-xl mt-6 max-w-none">
       <div class="content">
         <Content />
       </div>
@@ -55,31 +55,31 @@ const relatedPosts = posts
         @apply text-3xl font-bold mt-10 mb-6;
       }
       .content :global(h2) {
-        @apply text-2xl font-semibold mt-8 mb-4 border-b pb-2 border-gray-200 dark:border-gray-800;
+        @apply text-2xl font-semibold mt-8 mb-4 border-b pb-2 border-gray-200;
       }
       .content :global(h3) {
         @apply text-xl font-semibold mt-6 mb-3;
       }
       .content :global(p) {
-        @apply mb-4 leading-relaxed text-gray-700 dark:text-gray-300;
+        @apply mb-4 leading-relaxed text-gray-700;
       }
       .content :global(ul) {
-        @apply list-disc pl-6 mb-4 text-gray-700 dark:text-gray-300 space-y-2;
+        @apply list-disc pl-6 mb-4 text-gray-700 space-y-2;
       }
       .content :global(ol) {
-        @apply list-decimal pl-6 mb-4 text-gray-700 dark:text-gray-300 space-y-2;
+        @apply list-decimal pl-6 mb-4 text-gray-700 space-y-2;
       }
       .content :global(blockquote) {
-        @apply border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-6 text-gray-600 dark:text-gray-400;
+        @apply border-l-4 border-gray-300 pl-4 italic my-6 text-gray-600;
       }
       .content :global(pre) {
-        @apply rounded-xl p-4 overflow-x-auto mb-4 bg-gray-100 dark:bg-gray-800 text-sm;
+        @apply rounded-xl p-4 overflow-x-auto mb-4 bg-gray-100 text-sm;
       }
       .content :global(code) {
-        @apply bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono;
+        @apply bg-gray-100 rounded px-1.5 py-0.5 text-sm font-mono;
       }
       .content :global(a) {
-        @apply text-blue-600 dark:text-blue-400 hover:underline decoration-2 underline-offset-2;
+        @apply text-blue-600 hover:underline decoration-2 underline-offset-2;
       }
       .content :global(img) {
         @apply rounded-xl my-6 w-full shadow-lg;
@@ -89,22 +89,22 @@ const relatedPosts = posts
       }
       .content :global(th),
       .content :global(td) {
-        @apply border border-gray-300 dark:border-gray-700 px-4 py-2;
+        @apply border border-gray-300 px-4 py-2;
       }
       .content :global(th) {
-        @apply bg-gray-100 dark:bg-gray-800;
+        @apply bg-gray-100;
       }
       .content :global(tr) {
-        @apply even:bg-gray-50 dark:even:bg-gray-900;
+        @apply even:bg-gray-50;
       }
       .content :global(hr) {
-        @apply my-8 border-gray-200 dark:border-gray-800;
+        @apply my-8 border-gray-200;
       }
       .content :global(strong) {
-        @apply font-semibold text-gray-900 dark:text-white;
+        @apply font-semibold text-gray-900;
       }
       .content :global(em) {
-        @apply text-gray-800 dark:text-gray-200;
+        @apply text-gray-800;
       }
     </style>
   </article>
@@ -119,7 +119,7 @@ const relatedPosts = posts
           const imageSrc = relatedPost.data.heroImage ?? fallbackImage;
           return (
             <article class="card h-full flex flex-col overflow-hidden post-card" data-category={relatedPost.data.category}>
-              <a href={`/posts/${relatedPost.slug}`} class="block">
+              <a href={`/posts/${relatedPost.slug}`} class="block overflow-hidden">
                 <figure class="relative h-40 w-full overflow-hidden">
                   <Image src={imageSrc} alt={relatedPost.data.title} class="h-full w-full object-cover transition duration-200 hover:scale-105" loading={index < 2 ? "eager" : "lazy"} width={400} height={160} />
                 </figure>
@@ -133,12 +133,12 @@ const relatedPosts = posts
               </div>
 
               <div class="p-4 flex-1">
-                {relatedPost.data.description && <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3">{relatedPost.data.description}</p>}
+                {relatedPost.data.description && <p class="text-sm text-slate-600 line-clamp-3">{relatedPost.data.description}</p>}
               </div>
 
-              <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500">
                 <span>{new Date(relatedPost.data.pubDate).toLocaleDateString('mn-MN')}</span>
-                <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${relatedPost.slug}`}>Унших →</a>
+                <a class="text-indigo-600 hover:underline" href={`/posts/${relatedPost.slug}`}>Унших →</a>
               </div>
             </article>
           );

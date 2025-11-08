@@ -6,8 +6,8 @@ const categories = Array.from(new Set<string>(posts.map((p) => p.data.category))
 const showAll = Astro.props?.showAll ?? true;
 ---
 <div class="flex flex-wrap gap-2">
-  {showAll && <a href="/" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">Бүгд</a>}
+  {showAll && <a href="/" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200">Бүгд</a>}
   {categories.map((c) => (
-    <a href={`/categories/${slugify(c)}`} class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">{c}</a>
+    <a href={`/categories/${slugify(c)}`} class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200">{c}</a>
   ))}
 </div>

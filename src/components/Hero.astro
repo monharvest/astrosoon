@@ -4,10 +4,9 @@ import SmartPicture from './SmartPicture.astro';
 const { post } = Astro.props as { post: CollectionEntry<'posts'> };
 const heroSrc = post.data.heroImage ?? 'https://images.unsplash.com/photo-1529390079861-591de354faf5';
 ---
----
 <section class="rounded-2xl overflow-hidden bg-gray-100 mb-8 pt-12 relative">
   <div class="py-6 md:py-8 grid md:grid-cols-2 gap-6 items-stretch max-w-[1200px] mx-auto px-4 sm:px-6">
-    <a href={`/posts/${post.slug}`} class="block group">
+    <a href={`/posts/${post.slug}`} class="block group overflow-hidden">
       <SmartPicture
         src={heroSrc}
         alt={post.data.title}
@@ -57,26 +56,39 @@ const heroSrc = post.data.heroImage ?? 'https://images.unsplash.com/photo-152939
 </style>
 
 <script>
-  // Category filtering functionality (no sticky)
-  document.addEventListener('astro:page-load', () => {
-    setTimeout(() => {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const category = (button as HTMLElement).dataset.category;
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          button.classList.add('active');
-          const postCards = document.querySelectorAll('.post-card');
-          postCards.forEach(card => {
-            const postCategory = (card as HTMLElement).dataset.category;
-            if (category === 'all' || postCategory === category) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
-          });
+  // Category filtering functionality
+  function initCategoryFilter() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const postCards = document.querySelectorAll('.post-card');
+    
+    if (filterButtons.length === 0 || postCards.length === 0) return;
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = (button as HTMLElement).dataset.category;
+        
+        // Update active state
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Filter cards
+        postCards.forEach(card => {
+          const postCategory = (card as HTMLElement).dataset.category;
+          if (category === 'all' || postCategory === category) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
         });
       });
-    }, 100);
-  });
+    });
+  }
+
+  // Initialize immediately
+  initCategoryFilter();
+  
+  // Also initialize on page load events
+  document.addEventListener('DOMContentLoaded', initCategoryFilter);
+  document.addEventListener('astro:page-load', initCategoryFilter);
 </script>
