@@ -10,6 +10,10 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     <meta name="description" content={description} />
     {metaImage && <meta property="og:image" content={metaImage} />}
     
+    <!-- Preload critical fonts to prevent layout shift -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
   </head>
   <body class="min-h-full bg-slate-50 text-slate-900 font-sans">
     <slot name="header" />

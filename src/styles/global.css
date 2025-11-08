@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Preload critical fonts to prevent layout shift */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* Smooth corners/feel */
 .card {
   @apply bg-white/90 border border-slate-200/70 rounded-2xl shadow-card overflow-hidden;
@@ -18,8 +28,21 @@
 
 html {
   @apply scroll-smooth;
+  /* Prevent layout shifts from font loading */
+  font-display: swap;
 }
 
 .prose img {
   @apply rounded-xl;
+}
+
+/* Ensure consistent text rendering */
+* {
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Prevent layout shifts on images */
+img {
+  max-width: 100%;
+  height: auto;
 }

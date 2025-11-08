@@ -1,0 +1,61 @@
+---
+// Category filter component
+---
+
+<div id="category-buttons" class="pb-6 flex flex-wrap gap-2 max-w-[1200px] mx-auto pr-4 sm:pr-6">
+  <button id="filter-all" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn active" data-category="all">Бүгд</button>
+  <button id="filter-advent" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="advent">Advent</button>
+  <button id="filter-death-life" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="үхэл-ба-амилал">Үхэл ба амилал</button>
+  <button id="filter-good-news" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="сайн-мэдээ">Сайн мэдээ</button>
+  <button id="filter-teachings" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="сургаалт-зүйрлэлүүд">Сургаалт зүйрлэлүүд</button>
+  <button id="filter-eternal" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="мөнх-үгийн-ойлголт">Мөнх үгийн ойлголт</button>
+  <button id="filter-hell" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 filter-btn" data-category="тамын-тухай">Тамын тухай</button>
+</div>
+
+<style>
+  .filter-btn.active {
+    @apply bg-slate-200;
+  }
+
+  .post-card.hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  // Category filtering functionality
+  function initCategoryFilter() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const postCards = document.querySelectorAll('.post-card');
+
+    if (filterButtons.length === 0 || postCards.length === 0) return;
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = (button as HTMLElement).dataset.category;
+
+        // Update active state
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Filter cards
+        postCards.forEach(card => {
+          const postCategory = (card as HTMLElement).dataset.category;
+          if (category === 'all' || postCategory === category) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  }
+
+  // Initialize immediately
+  initCategoryFilter();
+
+  // Also initialize on page load events
+  document.addEventListener('DOMContentLoaded', initCategoryFilter);
+  document.addEventListener('astro:page-load', initCategoryFilter);
+</script>

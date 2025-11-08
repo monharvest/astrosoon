@@ -70,6 +70,8 @@ const fallback = (() => {
       loading={loading}
       decoding="async"
       fetchpriority={fetchpriority}
+      width={widths[widths.length - 1]}
+      height={height ? undefined : (aspect ? Math.round(widths[widths.length - 1] / eval(aspect)) : undefined)}
     />
   </picture>
   <slot />
