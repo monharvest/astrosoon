@@ -1,0 +1,75 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  aspect?: string; // e.g. "3/2", "4/3", "16/9"
+  quality?: number; // 55-65 is usually fine
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  widths = [320, 480, 640, 768, 960, 1200],
+  sizes = '(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw',
+  aspect = '3/2',
+  quality = 60,
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  class: klass = '',
+} = Astro.props as Props;
+
+function buildSrcset(format: 'avif' | 'webp' | 'jpeg') {
+  const isUnsplash = src.includes('images.unsplash.com');
+  if (!isUnsplash) return undefined;
+
+  return widths
+    .map((w) => {
+      const u = new URL(src);
+      u.searchParams.set('w', String(w));
+      u.searchParams.set('fit', 'crop');
+      u.searchParams.set('q', String(quality));
+      u.searchParams.set('auto', 'format');
+      if (format !== 'jpeg') u.searchParams.set('fm', format);
+      return `${u.toString()} ${w}w`;
+    })
+    .join(', ');
+}
+
+const avifSet = buildSrcset('avif');
+const webpSet = buildSrcset('webp');
+const isRemoteOptimizable = Boolean(avifSet || webpSet);
+
+const fallback = (() => {
+  // For remote Unsplash, use the largest candidate; otherwise use original src.
+  if (isRemoteOptimizable) {
+    const u = new URL(src);
+    u.searchParams.set('w', String(Math.max(...widths)));
+    u.searchParams.set('fit', 'crop');
+    u.searchParams.set('q', String(quality));
+    u.searchParams.set('auto', 'format');
+    return u.toString();
+  }
+  return src;
+})();
+---
+<figure class={`relative ${klass} ${aspect ? `aspect-[${aspect}]` : ''}`}>
+  <picture>
+    {avifSet && <source type="image/avif" srcset={avifSet} sizes={sizes} />}
+    {webpSet && <source type="image/webp" srcset={webpSet} sizes={sizes} />}
+    <img
+      src={fallback}
+      alt={alt}
+      class="h-full w-full object-cover"
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  </picture>
+  <slot />
+  
+</figure>
