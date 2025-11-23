@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout title="Offline - Udaxgui.com" description="You are currently offline">
+  <Fragment slot="header"><Header /></Fragment>
+
+  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+    <svg class="w-24 h-24 text-gray-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"></path>
+    </svg>
+    
+    <h1 class="text-3xl font-bold text-gray-900 mb-4">Та оффлайн байна</h1>
+    <p class="text-gray-600 mb-8 max-w-md">
+      Интернэт холболт тасарсан байна. Таны өмнө нь үзсэн хуудсууд кэшлэгдсэн байгаа тул тэдгээрийг үзэх боломжтой.
+    </p>
+    
+    <div class="space-y-4">
+      <button 
+        onclick="window.location.reload()" 
+        class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+      >
+        Дахин оролдох
+      </button>
+      
+      <a 
+        href="/" 
+        class="block px-6 py-3 text-gray-600 hover:text-gray-900 transition"
+      >
+        Нүүр хуудас руу буцах
+      </a>
+    </div>
+  </div>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+// PWA Install Prompt Component
+---
+
+<div id="pwa-install-prompt" class="hidden fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white rounded-lg shadow-2xl border border-gray-200 p-4 z-50 animate-slide-up">
+  <div class="flex items-start gap-3">
+    <div class="flex-shrink-0">
+      <svg class="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+      </svg>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h3 class="text-sm font-semibold text-gray-900 mb-1">
+        Апп суулгах
+      </h3>
+      <p class="text-xs text-gray-600 mb-3">
+        Udaxgui.com-г төхөөрөмж дээрээ суулгаад оффлайн ашиглаарай
+      </p>
+      <div class="flex gap-2">
+        <button id="pwa-install-btn" class="px-3 py-1.5 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition">
+          Суулгах
+        </button>
+        <button id="pwa-dismiss-btn" class="px-3 py-1.5 text-gray-600 text-xs font-medium hover:text-gray-900 transition">
+          Дараа
+        </button>
+      </div>
+    </div>
+    <button id="pwa-close-btn" class="flex-shrink-0 text-gray-400 hover:text-gray-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+</style>
+
+<script>
+  let deferredPrompt: any;
+  const promptDiv = document.getElementById('pwa-install-prompt');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const dismissBtn = document.getElementById('pwa-dismiss-btn');
+  const closeBtn = document.getElementById('pwa-close-btn');
+
+  // Listen for the beforeinstallprompt event
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    
+    // Show the install prompt after a delay
+    setTimeout(() => {
+      if (!localStorage.getItem('pwa-prompt-dismissed')) {
+        promptDiv?.classList.remove('hidden');
+      }
+    }, 3000);
+  });
+
+  // Handle install button click
+  installBtn?.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      return;
+    }
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    
+    // Clear the deferredPrompt
+    deferredPrompt = null;
+    promptDiv?.classList.add('hidden');
+  });
+
+  // Handle dismiss button click
+  dismissBtn?.addEventListener('click', () => {
+    promptDiv?.classList.add('hidden');
+    localStorage.setItem('pwa-prompt-dismissed', 'true');
+    setTimeout(() => {
+      localStorage.removeItem('pwa-prompt-dismissed');
+    }, 7 * 24 * 60 * 60 * 1000); // Reset after 7 days
+  });
+
+  // Handle close button click
+  closeBtn?.addEventListener('click', () => {
+    promptDiv?.classList.add('hidden');
+  });
+
+  // Detect if app is already installed
+  window.addEventListener('appinstalled', () => {
+    console.log('PWA was installed');
+    promptDiv?.classList.add('hidden');
+  });
+</script>
