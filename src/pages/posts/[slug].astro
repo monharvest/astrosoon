@@ -29,6 +29,28 @@ const relatedPosts = posts
     <header class="p-6">
       <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">{post.data.title}</h1>
       <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
+      
+      {post.data.pdfUrl && (
+        <div class="mt-4">
+          <button
+            id="pdf-toggle-btn"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span id="pdf-btn-text">PDF унших</span>
+          </button>
+          
+          <div id="pdf-viewer" class="hidden mt-6 border-2 border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden">
+            <iframe
+              src={post.data.pdfUrl}
+              class="w-full h-[800px]"
+              title="PDF Document"
+            ></iframe>
+          </div>
+        </div>
+      )}
     </header>
 
     {post.data.heroImage && (
@@ -149,3 +171,22 @@ const relatedPosts = posts
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>
+
+<script>
+  // PDF viewer toggle
+  const pdfToggleBtn = document.getElementById('pdf-toggle-btn');
+  const pdfViewer = document.getElementById('pdf-viewer');
+  const pdfBtnText = document.getElementById('pdf-btn-text');
+
+  pdfToggleBtn?.addEventListener('click', () => {
+    const isHidden = pdfViewer?.classList.contains('hidden');
+    
+    if (isHidden) {
+      pdfViewer?.classList.remove('hidden');
+      if (pdfBtnText) pdfBtnText.textContent = 'PDF хаах';
+    } else {
+      pdfViewer?.classList.add('hidden');
+      if (pdfBtnText) pdfBtnText.textContent = 'PDF унших';
+    }
+  });
+</script>
