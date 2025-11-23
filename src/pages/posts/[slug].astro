@@ -43,8 +43,8 @@ const relatedPosts = posts
           </button>
           
           <!-- Fullscreen PDF Modal -->
-          <div id="pdf-modal" class="hidden fixed inset-0 z-50 bg-black/90">
-            <div class="absolute top-4 right-4 flex gap-2">
+          <div id="pdf-modal" class="hidden fixed inset-0 z-50 bg-black/90 overflow-auto">
+            <div class="absolute top-4 right-4 flex gap-2 z-10">
               <button
                 id="pdf-close-btn"
                 class="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
@@ -55,11 +55,15 @@ const relatedPosts = posts
                 </svg>
               </button>
             </div>
-            <iframe
-              src={post.data.pdfUrl}
-              class="w-full h-full"
-              title="PDF Document"
-            ></iframe>
+            <div class="w-full h-full overflow-auto touch-pan-y">
+              <iframe
+                src={post.data.pdfUrl}
+                class="w-full min-h-full border-0"
+                style="height: 100vh; min-height: 100vh;"
+                title="PDF Document"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
         </div>
       )}
@@ -192,23 +196,29 @@ const relatedPosts = posts
 
   pdfToggleBtn?.addEventListener('click', () => {
     pdfModal?.classList.remove('hidden');
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
   });
 
-  pdfCloseBtn?.addEventListener('click', () => {
+  const closeModal = () => {
     pdfModal?.classList.add('hidden');
-  });
+    // Restore body scroll
+    document.body.style.overflow = '';
+  };
+
+  pdfCloseBtn?.addEventListener('click', closeModal);
 
   // Close on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !pdfModal?.classList.contains('hidden')) {
-      pdfModal?.classList.add('hidden');
+      closeModal();
     }
   });
 
-  // Close when clicking outside the iframe
+  // Close when clicking on the modal background (not the close button)
   pdfModal?.addEventListener('click', (e) => {
     if (e.target === pdfModal) {
-      pdfModal.classList.add('hidden');
+      closeModal();
     }
   });
 </script>
