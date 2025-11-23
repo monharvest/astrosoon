@@ -27,8 +27,8 @@ const relatedPosts = posts
 
   <article class="mx-auto max-w-3xl my-10">
     <header class="p-6">
-      <h1 class="text-3xl font-semibold text-gray-900">{post.data.title}</h1>
-      <div class="mt-2 text-sm text-gray-600">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
+      <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">{post.data.title}</h1>
+      <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
     </header>
 
     {post.data.heroImage && (
@@ -52,34 +52,34 @@ const relatedPosts = posts
 
     <style>
       .content :global(h1) {
-        @apply text-3xl font-bold mt-10 mb-6;
+        @apply text-3xl font-bold mt-10 mb-6 text-gray-900 dark:text-slate-100;
       }
       .content :global(h2) {
-        @apply text-2xl font-semibold mt-8 mb-4 border-b pb-2 border-gray-200;
+        @apply text-2xl font-semibold mt-8 mb-4 border-b pb-2 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-slate-100;
       }
       .content :global(h3) {
-        @apply text-xl font-semibold mt-6 mb-3;
+        @apply text-xl font-semibold mt-6 mb-3 text-gray-900 dark:text-slate-100;
       }
       .content :global(p) {
-        @apply mb-4 leading-relaxed text-gray-700;
+        @apply mb-4 leading-relaxed text-gray-700 dark:text-slate-300;
       }
       .content :global(ul) {
-        @apply list-disc pl-6 mb-4 text-gray-700 space-y-2;
+        @apply list-disc pl-6 mb-4 text-gray-700 dark:text-slate-300 space-y-2;
       }
       .content :global(ol) {
-        @apply list-decimal pl-6 mb-4 text-gray-700 space-y-2;
+        @apply list-decimal pl-6 mb-4 text-gray-700 dark:text-slate-300 space-y-2;
       }
       .content :global(blockquote) {
-        @apply border-l-4 border-gray-300 pl-4 italic my-6 text-gray-600;
+        @apply border-l-4 border-gray-300 dark:border-slate-600 pl-4 italic my-6 text-gray-600 dark:text-slate-400;
       }
       .content :global(pre) {
-        @apply rounded-xl p-4 overflow-x-auto mb-4 bg-gray-100 text-sm;
+        @apply rounded-xl p-4 overflow-x-auto mb-4 bg-gray-100 dark:bg-slate-800 text-sm text-gray-900 dark:text-slate-100;
       }
       .content :global(code) {
-        @apply bg-gray-100 rounded px-1.5 py-0.5 text-sm font-mono;
+        @apply bg-gray-100 dark:bg-slate-800 rounded px-1.5 py-0.5 text-sm font-mono text-gray-900 dark:text-slate-100;
       }
       .content :global(a) {
-        @apply text-blue-600 hover:underline decoration-2 underline-offset-2;
+        @apply text-blue-600 dark:text-blue-400 hover:underline decoration-2 underline-offset-2;
       }
       .content :global(img) {
         @apply rounded-xl my-6 w-full shadow-lg;
@@ -89,29 +89,29 @@ const relatedPosts = posts
       }
       .content :global(th),
       .content :global(td) {
-        @apply border border-gray-300 px-4 py-2;
+        @apply border border-gray-300 dark:border-slate-700 px-4 py-2 text-gray-900 dark:text-slate-300;
       }
       .content :global(th) {
-        @apply bg-gray-100;
+        @apply bg-gray-100 dark:bg-slate-800;
       }
       .content :global(tr) {
-        @apply even:bg-gray-50;
+        @apply even:bg-gray-50 dark:even:bg-slate-800/50;
       }
       .content :global(hr) {
-        @apply my-8 border-gray-200;
+        @apply my-8 border-gray-200 dark:border-slate-700;
       }
       .content :global(strong) {
-        @apply font-semibold text-gray-900;
+        @apply font-semibold text-gray-900 dark:text-slate-100;
       }
       .content :global(em) {
-        @apply text-gray-800;
+        @apply text-gray-800 dark:text-slate-300;
       }
     </style>
   </article>
 
   {relatedPosts.length > 0 && (
     <section class="mx-auto max-w-6xl my-16">
-      <h2 class="text-2xl font-semibold mb-8 text-center">Холбоотой нийтлэлүүд</h2>
+      <h2 class="text-2xl font-semibold mb-8 text-center text-gray-900 dark:text-slate-100">Холбоотой нийтлэлүүд</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedPosts.map((relatedPost, index) => {
           const relatedGradient = categoryClasses[relatedPost.data.category] ?? categoryClasses.Default;
@@ -133,12 +133,12 @@ const relatedPosts = posts
               </div>
 
               <div class="p-4 flex-1">
-                {relatedPost.data.description && <p class="text-sm text-slate-600 line-clamp-3">{relatedPost.data.description}</p>}
+                {relatedPost.data.description && <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">{relatedPost.data.description}</p>}
               </div>
 
-              <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500">
+              <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>{new Date(relatedPost.data.pubDate).toLocaleDateString('mn-MN')}</span>
-                <a class="text-indigo-600 hover:underline" href={`/posts/${relatedPost.slug}`}>Унших →</a>
+                <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${relatedPost.slug}`}>Унших →</a>
               </div>
             </article>
           );
