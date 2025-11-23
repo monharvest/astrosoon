@@ -22,5 +22,6 @@ declare module 'virtual:pwa-info' {
       linkTag: string;
     };
   }
-  export const pwaInfo: PwaInfo | undefined;
+  const pwaInfo: PwaInfo | undefined;
+  export { pwaInfo };
 }
