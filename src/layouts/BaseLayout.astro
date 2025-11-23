@@ -27,7 +27,7 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
-  <body class="min-h-full bg-slate-50 text-slate-900 font-sans">
+  <body class="preload min-h-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans">
     <slot name="header" />
     <slot name="hero" />
     <main class="max-w-[1200px] mx-auto px-4 sm:px-6 pb-16">
@@ -37,5 +37,20 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     <PWAInstallPrompt />
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <script src="/src/pwa.ts"></script>
+    <script>
+      // Remove preload class after page loads to enable transitions
+      window.addEventListener('load', () => {
+        document.body.classList.remove('preload');
+      });
+      
+      // Initialize theme immediately to prevent flash
+      (function() {
+        const theme = localStorage.getItem('theme') || 
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </body>
 </html>
