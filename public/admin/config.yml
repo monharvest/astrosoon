@@ -1,0 +1,64 @@
+backend:
+  name: test-repo
+
+local_backend: true
+
+media_folder: "public/posts"
+public_folder: "/posts"
+
+collections:
+  - name: posts
+    label: Нийтлэлүүд
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    format: frontmatter
+    fields:
+      - label: Гарчиг
+        name: title
+        widget: string
+      - label: Тайлбар
+        name: description
+        widget: text
+        required: false
+      - label: Нийтэлсэн огноо
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+      - label: Шинэчилсэн огноо
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - label: Ангилал
+        name: category
+        widget: select
+        options:
+          - Сайн мэдээ
+          - Advent
+          - Үхэл ба амилал
+          - Сургаалт зүйрлэлүүд
+          - Мөнх үгийн ойлголт
+          - Тамын тухай
+      - label: Түлхүүр үгс
+        name: tags
+        widget: list
+        default: []
+        required: false
+      - label: Зураг
+        name: heroImage
+        widget: image
+        required: false
+      - label: Онцлох
+        name: featured
+        widget: boolean
+        default: false
+      - label: PDF файл URL
+        name: pdfUrl
+        widget: string
+        required: false
+      - label: Агуулга
+        name: body
+        widget: markdown
