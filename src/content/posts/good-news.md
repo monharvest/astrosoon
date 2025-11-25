@@ -1,10 +1,13 @@
 ---
-title: "Авралтын сайн мэдээ"
-description: "Хүнийг аврах Бурханы сайхан мэдээ."
+title: Сайн мэдээ
+description: Хүнийг аврах Бурханы сайхан мэдээ.
 pubDate: "2025-10-18"
-category: "Сайн мэдээ"
-tags: ["сайн мэдээ", "аврал"]
-heroImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1600&auto=format&fit=crop"
+category: Сайн мэдээ
+tags:
+  - сайн мэдээ
+  - аврал
+heroImage: /posts/death2.jpeg
+featured: false
 ---
 
 Сайн мэдээ бол хүнийг аврах Бурханы хүчтэй зэвсэг юм. Энэ нь бүх хүнд зориулагдсан.
