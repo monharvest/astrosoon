@@ -33,6 +33,9 @@
           "type": "boolean",
           "default": false
         },
+        "pdfUrl": {
+          "type": "string"
+        },
         "$schema": {
           "type": "string"
         }
