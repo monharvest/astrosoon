@@ -1,7 +1,7 @@
 ---
 title: Advent бэлтгэл
 description: Эзэний ирэхийг хүлээх бэлтгэлийн үе.
-pubDate: 2025-10-20
+pubDate: "2025-10-20"
 category: Advent
 tags:
   - advent

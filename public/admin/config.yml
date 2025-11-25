@@ -26,11 +26,15 @@ collections:
         widget: datetime
         date_format: YYYY-MM-DD
         time_format: false
+        picker_utc: false
+        format: YYYY-MM-DD
       - label: Шинэчилсэн огноо
         name: updatedDate
         widget: datetime
         date_format: YYYY-MM-DD
         time_format: false
+        picker_utc: false
+        format: YYYY-MM-DD
         required: false
       - label: Ангилал
         name: category
