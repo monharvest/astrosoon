@@ -1,10 +1,13 @@
 ---
-title: "Амьдралын сургамж"
-description: "Амьдралын туршлагаас суралцсан сургамж, зүйрлэлүүд."
+title: Амьдралын сургамж
+description: Амьдралын туршлагаас суралцсан сургамж, зүйрлэлүүд.
 pubDate: "2025-10-16"
-category: "Сургаалт зүйрлэлүүд"
-tags: ["зүйрлэл", "сургамж"]
-heroImage: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop"
+category: Сургаалт зүйрлэлүүд
+tags:
+  - зүйрлэл
+  - сургамж
+heroImage: /posts/advent4.webp
+featured: false
 ---
 
 Амьдрал бол хамгийн сайхан багш юм. Туршлага бүрээс суралцах нь чухал.

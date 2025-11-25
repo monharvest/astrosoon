@@ -5,8 +5,18 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    pubDate: z.string(),
-    updatedDate: z.string().optional(),
+    pubDate: z.union([z.string(), z.date()]).transform((val) => {
+      if (val instanceof Date) {
+        return val.toISOString().split('T')[0];
+      }
+      return val;
+    }),
+    updatedDate: z.union([z.string(), z.date()]).optional().transform((val) => {
+      if (val instanceof Date) {
+        return val.toISOString().split('T')[0];
+      }
+      return val;
+    }),
     category: z.string(),
     tags: z.array(z.string()).default([]),
     heroImage: z.string().optional(),
