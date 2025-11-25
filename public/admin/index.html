@@ -9,14 +9,5 @@
   <body>
     <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-      // Explicitly set config path
-      window.CMS_MANUAL_INIT = true;
-      window.addEventListener('DOMContentLoaded', () => {
-        if (window.CMS) {
-          window.CMS.init({ config: { load_config_file: true } });
-        }
-      });
-    </script>
   </body>
 </html>
