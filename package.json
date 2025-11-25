@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "dev:cms": "npm run dev & npx decap-server",
     "build": "astro build",
     "preview": "astro preview",
     "format": "prettier --write ."
