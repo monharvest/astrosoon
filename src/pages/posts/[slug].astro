@@ -173,59 +173,71 @@ const relatedPosts = posts
     const pdfUrl = pdfOpenBtn.getAttribute('data-pdf-url');
     
     pdfOpenBtn.addEventListener('click', () => {
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      // Get header height to position PDF below it
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.getBoundingClientRect().bottom : 64;
       
-      if (isMobile) {
-        // Mobile: open PDF directly in browser (native PDF viewer with scrolling)
-        window.location.href = pdfUrl!;
-      } else {
-        // Desktop: use fullscreen overlay
-        const overlay = document.createElement('div');
-        overlay.id = 'pdf-viewer-overlay';
-        overlay.className = 'fixed inset-0 bg-slate-900 z-40';
-        overlay.style.top = '0';
-        
-        // Create close button
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg';
-        closeBtn.innerHTML = `
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          <span>Хаах</span>
-        `;
-        
-        // Create iframe for PDF
-        const iframe = document.createElement('iframe');
-        iframe.src = pdfUrl + '#toolbar=1&navpanes=0&scrollbar=1';
-        iframe.className = 'w-full h-full border-0';
-        iframe.style.height = '100vh';
-        
-        overlay.appendChild(iframe);
-        document.body.appendChild(overlay);
-        document.body.appendChild(closeBtn);
-        
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
-        
-        // Close handler
-        const closePdfViewer = () => {
-          overlay.remove();
-          closeBtn.remove();
-          document.body.style.overflow = '';
-        };
-        
-        closeBtn.addEventListener('click', closePdfViewer);
-        
-        // Close on escape key
-        const escHandler = (e: KeyboardEvent) => {
-          if (e.key === 'Escape') {
-            closePdfViewer();
-            document.removeEventListener('keydown', escHandler);
-          }
-        };
-        document.addEventListener('keydown', escHandler);
-      }
+      // Create container that sits below header
+      const container = document.createElement('div');
+      container.id = 'pdf-viewer-container';
+      container.className = 'fixed left-0 right-0 bottom-0 bg-slate-900 z-30';
+      container.style.top = headerHeight + 'px';
+      
+      // Create close button bar
+      const closeBar = document.createElement('div');
+      closeBar.className = 'absolute top-0 left-0 right-0 bg-slate-800 px-4 py-2 flex justify-between items-center z-40';
+      closeBar.innerHTML = `
+        <span class="text-white text-sm">PDF Viewer</span>
+      `;
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors';
+      closeBtn.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <span>Хаах</span>
+      `;
+      closeBar.appendChild(closeBtn);
+      
+      // Create scrollable wrapper for iframe (for mobile touch scrolling)
+      const scrollWrapper = document.createElement('div');
+      scrollWrapper.className = 'absolute left-0 right-0 bottom-0 overflow-auto';
+      scrollWrapper.style.top = '44px'; // Height of close bar
+      scrollWrapper.style.webkitOverflowScrolling = 'touch';
+      
+      // Create iframe for PDF
+      const iframe = document.createElement('iframe');
+      iframe.src = pdfUrl + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+      iframe.className = 'w-full border-0';
+      iframe.style.height = '100%';
+      iframe.style.minHeight = 'calc(100vh - ' + (headerHeight + 44) + 'px)';
+      iframe.setAttribute('allowfullscreen', 'true');
+      
+      scrollWrapper.appendChild(iframe);
+      container.appendChild(closeBar);
+      container.appendChild(scrollWrapper);
+      document.body.appendChild(container);
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+      
+      // Close handler
+      const closePdfViewer = () => {
+        container.remove();
+        document.body.style.overflow = '';
+      };
+      
+      closeBtn.addEventListener('click', closePdfViewer);
+      
+      // Close on escape key
+      const escHandler = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          closePdfViewer();
+          document.removeEventListener('keydown', escHandler);
+        }
+      };
+      document.addEventListener('keydown', escHandler);
     });
   }
 </script>
