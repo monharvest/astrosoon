@@ -73,18 +73,18 @@ const relatedPosts = posts
       <div class="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
         <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">PDF хувилбар</h3>
         <div class="flex flex-wrap gap-3">
-          <button
-            id="pdf-open-btn"
-            type="button"
+          <a
+            href={pdfHref}
+            target="_blank"
+            rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg transition-colors shadow-sm"
-            data-pdf-url={pdfHref}
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
             <span>PDF үзэх</span>
-          </button>
+          </a>
 
           <a
             href={pdfHref}
@@ -96,73 +96,6 @@ const relatedPosts = posts
             </svg>
             <span>Татах</span>
           </a>
-        </div>
-
-        <!-- PDF Overlay Modal -->
-        <div 
-          id="pdf-overlay" 
-          class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-sm sm:p-4 md:p-8"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="relative w-full max-w-5xl h-full sm:h-[90vh] flex flex-col bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-            <!-- Modal Header -->
-            <div class="flex items-center p-3 sm:p-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
-              <!-- Mobile Back Button -->
-              <button 
-                id="pdf-back-btn"
-                class="sm:hidden flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-medium mr-2"
-              >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Буцах</span>
-              </button>
-
-              <div class="flex flex-col min-w-0 flex-1">
-                <h3 class="text-sm sm:text-lg font-semibold text-gray-900 dark:text-white truncate pr-4">{post.data.title}</h3>
-                <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-slate-400 sm:hidden">PDF Уншигч</span>
-              </div>
-
-              <div class="flex items-center gap-1 sm:gap-2">
-                <a 
-                  href={pdfHref}
-                  target="_blank"
-                  class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors text-gray-500 dark:text-slate-400"
-                  title="Шинэ цонхонд нээх"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-                <!-- Desktop Close Button -->
-                <button 
-                  id="pdf-close-btn"
-                  class="hidden sm:block p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-white"
-                  aria-label="Close PDF"
-                >
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-            <!-- Modal Content -->
-            <div class="flex-1 bg-gray-100 dark:bg-slate-950 relative overflow-hidden">
-              <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-950 z-0">
-                <div class="flex flex-col items-center gap-3">
-                  <div class="animate-spin rounded-full h-10 w-10 border-4 border-indigo-500 border-t-transparent"></div>
-                  <span class="text-sm text-gray-500 dark:text-slate-400">Уншиж байна...</span>
-                </div>
-              </div>
-              <iframe
-                id="pdf-iframe"
-                class="w-full h-full border-none opacity-0 transition-opacity duration-300"
-                title="PDF Viewer"
-              ></iframe>
-            </div>
-          </div>
         </div>
       </div>
     )}
@@ -265,77 +198,5 @@ const relatedPosts = posts
   )}
 
   <Fragment slot="footer"><Footer /></Fragment>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const openBtn = document.getElementById('pdf-open-btn');
-      const closeBtn = document.getElementById('pdf-close-btn');
-      const backBtn = document.getElementById('pdf-back-btn');
-      const overlay = document.getElementById('pdf-overlay');
-      const iframe = document.getElementById('pdf-iframe') as HTMLIFrameElement;
-      const loader = document.getElementById('pdf-loader');
-      
-      if (!openBtn || !overlay || !iframe) return;
-      
-      const pdfUrl = openBtn.getAttribute('data-pdf-url');
-      let hasLoaded = false;
-
-      const openModal = () => {
-        overlay.classList.remove('hidden');
-        overlay.classList.add('flex');
-        document.body.style.overflow = 'hidden'; // Lock scroll
-        
-        // Add a state to history so browser back button works
-        window.history.pushState({ pdfOpen: true }, '');
-
-        if (!hasLoaded && pdfUrl) {
-          iframe.src = pdfUrl;
-          iframe.onload = () => {
-            if (loader) loader.style.display = 'none';
-            iframe.style.opacity = '1';
-            hasLoaded = true;
-          };
-        }
-      };
-
-      const closeModal = () => {
-        overlay.classList.add('hidden');
-        overlay.classList.remove('flex');
-        document.body.style.overflow = ''; // Unlock scroll
-        
-        // If we closed manually, and the state is still there, go back in history
-        if (window.history.state?.pdfOpen) {
-          window.history.back();
-        }
-      };
-
-      openBtn.addEventListener('click', openModal);
-      closeBtn?.addEventListener('click', closeModal);
-      backBtn?.addEventListener('click', closeModal);
-
-      // Handle browser back button
-      window.addEventListener('popstate', (e) => {
-        if (!overlay.classList.contains('hidden')) {
-          overlay.classList.add('hidden');
-          overlay.classList.remove('flex');
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Close on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
-          closeModal();
-        }
-      });
-
-      // Close on clicking outside the modal content (desktop only)
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay && window.innerWidth >= 640) {
-          closeModal();
-        }
-      });
-    });
-  </script>
 </BaseLayout>
 
