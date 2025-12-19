@@ -51,17 +51,20 @@ const relatedPosts = posts
       
       {pdfHref && (
         <div class="mt-4 flex flex-wrap gap-3">
-          <a
-            href={pdfHref}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            id="pdf-toggle-btn"
+            type="button"
             class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg transition-colors"
+            data-pdf-url={pdfHref}
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <span>PDF нээх</span>
-          </a>
+            <span id="pdf-btn-text">PDF нээх</span>
+            <svg id="pdf-chevron" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
           <a
             href={pdfHref}
@@ -69,10 +72,40 @@ const relatedPosts = posts
             class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 rounded-lg transition-colors border border-gray-200 dark:border-slate-700"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             <span>PDF татах</span>
           </a>
+
+          <a
+            href={pdfHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 rounded-lg transition-colors border border-gray-200 dark:border-slate-700"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>Шинэ цонхонд</span>
+          </a>
+        </div>
+      )}
+
+      <!-- PDF Viewer Container -->
+      {pdfHref && (
+        <div 
+          id="pdf-viewer-container" 
+          class="overflow-hidden transition-all duration-500 ease-in-out"
+          style="max-height: 0; opacity: 0;"
+        >
+          <div class="mt-4 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
+            <iframe
+              id="pdf-iframe"
+              class="w-full"
+              style="height: 70vh; min-height: 500px;"
+              title="PDF Viewer"
+            ></iframe>
+          </div>
         </div>
       )}
     </header>
@@ -194,5 +227,54 @@ const relatedPosts = posts
   )}
 
   <Fragment slot="footer"><Footer /></Fragment>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('pdf-toggle-btn');
+      const container = document.getElementById('pdf-viewer-container');
+      const iframe = document.getElementById('pdf-iframe') as HTMLIFrameElement;
+      const btnText = document.getElementById('pdf-btn-text');
+      const chevron = document.getElementById('pdf-chevron');
+      
+      if (!toggleBtn || !container || !iframe) return;
+      
+      const pdfUrl = toggleBtn.getAttribute('data-pdf-url');
+      let isOpen = false;
+      let hasLoaded = false;
+      
+      toggleBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+          // Load PDF only on first open
+          if (!hasLoaded && pdfUrl) {
+            iframe.src = pdfUrl;
+            hasLoaded = true;
+          }
+          
+          // Expand
+          container.style.maxHeight = '80vh';
+          container.style.opacity = '1';
+          container.style.marginTop = '1rem';
+          
+          if (btnText) btnText.textContent = 'PDF хаах';
+          if (chevron) chevron.style.transform = 'rotate(180deg)';
+          
+          // Smooth scroll to viewer
+          setTimeout(() => {
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 300);
+        } else {
+          // Collapse
+          container.style.maxHeight = '0';
+          container.style.opacity = '0';
+          container.style.marginTop = '0';
+          
+          if (btnText) btnText.textContent = 'PDF нээх';
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+      });
+    });
+  </script>
 </BaseLayout>
 
