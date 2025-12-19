@@ -16,6 +16,25 @@ const post = posts.find((p) => p.slug === Astro.params.slug)!;
 const { Content } = await post.render();
 const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
 
+const getEncodedAssetUrl = (url: string | undefined) => {
+  if (!url) return undefined;
+  try {
+    if (/^https?:\/\//i.test(url)) return url;
+    const origin = Astro.site ?? new URL(Astro.url).origin;
+    const urlObj = new URL(url, origin);
+    const encodedPath = urlObj.pathname
+      .split('/')
+      .map(segment => (segment ? encodeURIComponent(decodeURIComponent(segment)) : segment))
+      .join('/');
+    return `${urlObj.origin}${encodedPath}`;
+  } catch (err) {
+    console.warn('Failed to encode asset url', err);
+    return url;
+  }
+};
+
+const pdfHref = getEncodedAssetUrl(post.data.pdfUrl);
+
 // Get related posts (same category, excluding current post)
 const relatedPosts = posts
   .filter(p => p.data.category === post.data.category && p.slug !== post.slug)
@@ -30,10 +49,10 @@ const relatedPosts = posts
       <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">{post.data.title}</h1>
       <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
       
-      {post.data.pdfUrl && (
+      {pdfHref && (
         <div class="mt-4 flex flex-wrap gap-3">
           <a
-            href={encodeURI(post.data.pdfUrl)}
+            href={pdfHref}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg transition-colors"
@@ -45,7 +64,7 @@ const relatedPosts = posts
           </a>
 
           <a
-            href={encodeURI(post.data.pdfUrl)}
+            href={pdfHref}
             download
             class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 rounded-lg transition-colors border border-gray-200 dark:border-slate-700"
           >
