@@ -1,13 +1,14 @@
 ---
 title: Тамын бодит байдал
 description: Там гэж юу болох, яагаад зайлсхийх ёстой тухай.
-pubDate: "2025-10-22"
+pubDate: 2025-10-22
 category: Тамын тухай
 tags:
   - там
   - сэрэмжлүүлэг
-heroImage: /posts/tam1.jpeg
+heroImage: /posts/death2.jpeg
 featured: false
+pdfUrl: /pdfs/Үхэл 10_compressed.pdf
 ---
 
 Там бол хүний сэтгэл зүрхийг айлгах бодит байдал юм. Энэ нь гэм нүгэлтнүүдийн төгсгөлийн газар билээ.
