@@ -31,7 +31,7 @@ const relatedPosts = posts
       <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
       
       {post.data.pdfUrl && (
-        <div class="mt-4">
+        <div class="mt-4 flex flex-wrap gap-3">
           <button
             id="pdf-open-btn"
             data-pdf-url={post.data.pdfUrl}
@@ -42,6 +42,18 @@ const relatedPosts = posts
             </svg>
             <span>PDF унших</span>
           </button>
+
+          <a 
+            href={post.data.pdfUrl} 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 rounded-lg transition-colors border border-gray-200 dark:border-slate-700"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>Татах / Нээх</span>
+          </a>
         </div>
       )}
     </header>
@@ -205,7 +217,9 @@ const relatedPosts = posts
       const pdfContent = document.createElement('div');
       pdfContent.className = 'flex-1 overflow-hidden';
       
-      if (isMobile) {
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+      if (isMobile && !isLocalhost) {
         // Mobile: Use Google Docs Viewer which handles scrolling properly
         const fullPdfUrl = pdfUrl?.startsWith('http') 
           ? pdfUrl 
@@ -218,9 +232,9 @@ const relatedPosts = posts
         iframe.setAttribute('loading', 'eager');
         pdfContent.appendChild(iframe);
       } else {
-        // Desktop: Use native browser PDF viewer
+        // Desktop or Localhost: Use native browser PDF viewer
         const iframe = document.createElement('iframe');
-        iframe.src = pdfUrl + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+        iframe.src = encodeURI(pdfUrl!) + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
         iframe.className = 'w-full h-full border-0';
         iframe.setAttribute('allowfullscreen', 'true');
         pdfContent.appendChild(iframe);
