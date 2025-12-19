@@ -62,6 +62,7 @@ collections:
         required: false
         media_folder: "public/pdfs"
         public_folder: "/pdfs"
+        choose_dir: true # allow picking the correct category subfolder (e.g., /pdfs/advent)
       - label: Агуулга
         name: body
         widget: markdown
