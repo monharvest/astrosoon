@@ -56,10 +56,12 @@ collections:
         name: featured
         widget: boolean
         default: false
-      - label: PDF файл URL
+      - label: PDF файл
         name: pdfUrl
-        widget: string
+        widget: file
         required: false
+        media_folder: "public/pdfs"
+        public_folder: "/pdfs"
       - label: Агуулга
         name: body
         widget: markdown
