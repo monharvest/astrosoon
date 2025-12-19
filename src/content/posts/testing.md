@@ -7,6 +7,6 @@ tags:
   - test
 heroImage: /posts/advnet3.webp
 featured: false
-pdfUrl: /pdfs/Баян хүн Лазар хоёр 2_compressed.pdf
+pdfUrl: /pdfs/bayan-khun-lazar-khoyor-2.pdf
 ---
 test

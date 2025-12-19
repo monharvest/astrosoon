@@ -8,7 +8,7 @@ tags:
   - туршилт
 heroImage: /olive.jpg
 featured: false
-pdfUrl: /pdfs/Сайн самари хүн хэн бэ_compressed.pdf
+pdfUrl: /pdfs/sayn-samari-khun-khen-be.pdf
 ---
 
 # Том гарчиг

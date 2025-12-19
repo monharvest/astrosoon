@@ -10,7 +10,7 @@ tags:
   - итгэл
 heroImage: https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop
 featured: true
-pdfUrl: /pdfs/Мөнх 1_compressed.pdf
+pdfUrl: /pdfs/monkh-1.pdf
 ---
 
 Мөнх гэдэг үг нь хүний оюун ухааны хязгаараас давсан ойлголт юм. Энэ нь цаг хугацааны хязгаараас ангид байдаг.

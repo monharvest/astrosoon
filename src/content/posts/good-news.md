@@ -8,7 +8,7 @@ tags:
   - аврал
 heroImage: /posts/death2.jpeg
 featured: false
-pdfUrl: /pdfs/Баян хүн Лазар хоёр 2_compressed.pdf
+pdfUrl: /pdfs/bayan-khun-lazar-khoyor-2.pdf
 ---
 
 Сайн мэдээ бол хүнийг аврах Бурханы хүчтэй зэвсэг юм. Энэ нь бүх хүнд зориулагдсан.

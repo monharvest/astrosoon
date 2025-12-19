@@ -8,7 +8,7 @@ tags:
   - бэлтгэл
 heroImage: /posts/advent4.webp
 featured: false
-pdfUrl: /pdfs/Үндэстнүүдэд_зориулсан_сайн_мэдээ_9_compressed.pdf
+pdfUrl: /pdfs/undestnuuded-zoriulsan-sayn-medee-9.pdf
 ---
 
 Advent бол Эзэний ирэхийг хүлээх бэлгэдлийн үе юм. Энэ үе нь бидэнд шинэчлэлтийг авчирдаг.

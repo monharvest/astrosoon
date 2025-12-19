@@ -8,7 +8,7 @@ tags:
   - сэрэмжлүүлэг
 heroImage: /posts/death2.jpeg
 featured: false
-pdfUrl: /pdfs/Үхэл 10_compressed.pdf
+pdfUrl: /pdfs/ukhel-10.pdf
 ---
 
 Там бол хүний сэтгэл зүрхийг айлгах бодит байдал юм. Энэ нь гэм нүгэлтнүүдийн төгсгөлийн газар билээ.
