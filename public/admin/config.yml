@@ -51,9 +51,6 @@ collections:
       - label: Зураг
         name: heroImage
         widget: image
-        media_folder: "public/posts"
-        public_folder: "/posts"
-        choose_dir: true
         required: false
       - label: Онцлох
         name: featured
