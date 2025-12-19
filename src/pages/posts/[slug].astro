@@ -34,6 +34,7 @@ const getEncodedAssetUrl = (url: string | undefined) => {
 };
 
 const pdfHref = getEncodedAssetUrl(post.data.pdfUrl);
+const pdfViewerUrl = pdfHref ? `/view-pdf?url=${encodeURIComponent(pdfHref)}&title=${encodeURIComponent(post.data.title)}` : null;
 
 // Get related posts (same category, excluding current post)
 const relatedPosts = posts
@@ -75,7 +76,8 @@ const relatedPosts = posts
         <div class="flex flex-wrap gap-3">
           <a
             id="pdf-view-link"
-            href={pdfHref}
+            href={pdfViewerUrl}
+            data-pdf-url={pdfHref}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg transition-colors shadow-sm"
@@ -244,10 +246,13 @@ const relatedPosts = posts
     const loader = document.getElementById('pdf-loader');
 
     function openModal(e: MouseEvent) {
+      // Only open overlay on desktop (sm breakpoint and up)
+      if (window.innerWidth < 640) return;
+
       e.preventDefault();
       if (!overlay || !iframe || !viewLink) return;
 
-      const pdfUrl = viewLink.getAttribute('href');
+      const pdfUrl = viewLink.getAttribute('data-pdf-url');
       if (!pdfUrl) return;
 
       // Show overlay

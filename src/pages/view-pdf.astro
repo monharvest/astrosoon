@@ -1,0 +1,55 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { pwaInfo } from 'virtual:pwa-info';
+
+const { searchParams } = Astro.url;
+const pdfUrl = searchParams.get('url');
+const title = searchParams.get('title') || 'PDF Viewer';
+
+if (!pdfUrl) {
+  return Astro.redirect('/');
+}
+---
+
+<html lang="mn" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} - Udaxgui.com</title>
+    <meta name="theme-color" content="#4b5563" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .pdf-container {
+        flex: 1;
+        width: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-900">
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme') || 
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <Header />
+    <iframe src={pdfUrl} class="pdf-container" title={title}></iframe>
+    <script src="/src/pwa.ts"></script>
+  </body>
+</html>
