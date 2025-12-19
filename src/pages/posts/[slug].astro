@@ -182,10 +182,27 @@ const relatedPosts = posts
   const pdfOpenBtn = document.getElementById('pdf-open-btn');
   
   if (pdfOpenBtn) {
-    const pdfUrl = pdfOpenBtn.getAttribute('data-pdf-url');
+    const rawPdfUrl = pdfOpenBtn.getAttribute('data-pdf-url');
+
+    const resolvePdfUrl = (url) => {
+      if (!url) return null;
+      try {
+        // Ensure relative paths (with spaces or unicode) resolve correctly
+        return new URL(url, window.location.origin).toString();
+      } catch (err) {
+        console.warn('Invalid PDF URL', err);
+        return null;
+      }
+    };
+    const pdfUrl = resolvePdfUrl(rawPdfUrl);
     
     pdfOpenBtn.addEventListener('click', () => {
+      if (!pdfUrl) {
+        window.open(rawPdfUrl ?? '/', '_blank');
+        return;
+      }
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
       // Get header element
       const headerEl = document.querySelector('nav')?.closest('header') || document.querySelector('header');
@@ -217,16 +234,10 @@ const relatedPosts = posts
       const pdfContent = document.createElement('div');
       pdfContent.className = 'flex-1 overflow-hidden';
       
-      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
       if (isMobile && !isLocalhost) {
-        // Mobile: Use Google Docs Viewer which handles scrolling properly
-        const fullPdfUrl = pdfUrl?.startsWith('http') 
-          ? pdfUrl 
-          : window.location.origin + pdfUrl;
-        
+        // Mobile non-local: use Google Docs Viewer to improve compatibility
         const iframe = document.createElement('iframe');
-        iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(fullPdfUrl!)}&embedded=true`;
+        iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
         iframe.className = 'w-full h-full border-0';
         iframe.setAttribute('allowfullscreen', 'true');
         iframe.setAttribute('loading', 'eager');
@@ -234,7 +245,7 @@ const relatedPosts = posts
       } else {
         // Desktop or Localhost: Use native browser PDF viewer
         const iframe = document.createElement('iframe');
-        iframe.src = encodeURI(pdfUrl!) + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+        iframe.src = `${pdfUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`;
         iframe.className = 'w-full h-full border-0';
         iframe.setAttribute('allowfullscreen', 'true');
         pdfContent.appendChild(iframe);
