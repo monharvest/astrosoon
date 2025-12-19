@@ -1,11 +1,14 @@
 ---
-title: "Markdown жишээ нийтлэл"
-description: "Markdown форматын бүх элементүүдийг туршиж үзэх."
-pubDate: "2025-11-07"
-category: "Сайн мэдээ"
-tags: ["markdown", "туршилт"]
-heroImage: "/olive.jpg"
-pdfUrl: "https://pub-1e39fb82299f4903ab072a7c0ee58083.r2.dev/1758918183947-%D0%9F%D1%83%D1%83%D0%BB%D0%B8%D0%B9%D0%BD%20%D0%B7%D0%B0%D1%80%D0%BB%D0%B0%D1%81%D0%B0%D0%BD%20%D1%81%D0%B0%D0%B9%D0%BD%20%D0%BC%D1%8D%D0%B4%D1%8D%D1%8D1_compressed.pdf"
+title: Markdown жишээ нийтлэл
+description: Markdown форматын бүх элементүүдийг туршиж үзэх.
+pubDate: 2025-11-07
+category: Сайн мэдээ
+tags:
+  - markdown
+  - туршилт
+heroImage: /olive.jpg
+featured: false
+pdfUrl: /pdfs/Баян хүн Лазар хоёр 1_compressed.pdf
 ---
 
 # Том гарчиг
