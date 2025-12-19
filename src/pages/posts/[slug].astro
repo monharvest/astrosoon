@@ -99,14 +99,14 @@ const relatedPosts = posts
           </a>
         </div>
 
-        <!-- PDF Overlay Modal (Desktop Only) -->
+        <!-- PDF Overlay Modal -->
         <div 
           id="pdf-overlay" 
-          class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8"
+          class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm sm:p-4 md:p-8"
           role="dialog"
           aria-modal="true"
         >
-          <div class="relative w-full max-w-5xl h-[90vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+          <div class="relative w-full max-w-5xl h-full sm:h-[90vh] flex flex-col bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate pr-4">{post.data.title}</h3>
@@ -122,7 +122,7 @@ const relatedPosts = posts
             </div>
             
             <!-- Modal Content -->
-            <div class="flex-1 bg-gray-100 dark:bg-slate-950 relative">
+            <div class="flex-1 bg-gray-100 dark:bg-slate-950 relative overflow-auto touch-auto">
               <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-950">
                 <div class="animate-spin rounded-full h-10 w-10 border-4 border-indigo-500 border-t-transparent"></div>
               </div>
@@ -244,9 +244,6 @@ const relatedPosts = posts
     const loader = document.getElementById('pdf-loader');
 
     function openModal(e: MouseEvent) {
-      // Only open overlay on desktop (sm breakpoint and up)
-      if (window.innerWidth < 640) return;
-
       e.preventDefault();
       if (!overlay || !iframe || !viewLink) return;
 
