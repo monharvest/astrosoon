@@ -64,7 +64,6 @@ collections:
         required: false
         media_folder: "../../../public/pdfs"
         public_folder: "/pdfs"
-        choose_dir: true
       - label: Агуулга
         name: body
         widget: markdown
