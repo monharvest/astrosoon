@@ -20,7 +20,7 @@ export default defineConfig({
       mode: 'production',
       base: '/',
       scope: '/',
-      includeAssets: ['favicon.svg', 'robots.txt'],
+      includeAssets: ['favicon.svg', 'robots.txt', 'pdfs/**/*.pdf'],
       registerType: 'autoUpdate',
       manifest: {
         name: 'Udaxgui.com - Итгэл ба Амьдрал',
@@ -52,7 +52,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2,pdf}'],
+        navigateFallbackDenylist: [/\.pdf$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
