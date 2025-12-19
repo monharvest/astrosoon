@@ -1,13 +1,14 @@
 ---
 title: Advent бэлтгэл
 description: Эзэний ирэхийг хүлээх бэлтгэлийн үе.
-pubDate: "2025-10-20"
+pubDate: 2025-10-20
 category: Advent
 tags:
   - advent
   - бэлтгэл
-heroImage: /posts/advent.webp
+heroImage: /posts/advent4.webp
 featured: false
+pdfUrl: /pdfs/Үндэстнүүдэд_зориулсан_сайн_мэдээ_9_compressed.pdf
 ---
 
 Advent бол Эзэний ирэхийг хүлээх бэлгэдлийн үе юм. Энэ үе нь бидэнд шинэчлэлтийг авчирдаг.

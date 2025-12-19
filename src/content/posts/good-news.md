@@ -1,13 +1,14 @@
 ---
 title: Сайн мэдээ
 description: Хүнийг аврах Бурханы сайхан мэдээ.
-pubDate: "2025-10-18"
+pubDate: 2025-10-18
 category: Сайн мэдээ
 tags:
   - сайн мэдээ
   - аврал
 heroImage: /posts/death2.jpeg
 featured: false
+pdfUrl: /pdfs/Баян хүн Лазар хоёр 2_compressed.pdf
 ---
 
 Сайн мэдээ бол хүнийг аврах Бурханы хүчтэй зэвсэг юм. Энэ нь бүх хүнд зориулагдсан.
