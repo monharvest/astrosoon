@@ -8,7 +8,7 @@ tags:
   - туршилт
 heroImage: /olive.jpg
 featured: false
-pdfUrl: /pdfs/Баян хүн Лазар хоёр 1_compressed.pdf
+pdfUrl: /pdfs/Сайн самари хүн хэн бэ_compressed.pdf
 ---
 
 # Том гарчиг
