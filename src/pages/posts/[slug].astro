@@ -74,6 +74,7 @@ const relatedPosts = posts
         <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">PDF хувилбар</h3>
         <div class="flex flex-wrap gap-3">
           <a
+            id="pdf-view-link"
             href={pdfHref}
             target="_blank"
             rel="noopener noreferrer"
@@ -96,6 +97,42 @@ const relatedPosts = posts
             </svg>
             <span>Татах</span>
           </a>
+        </div>
+
+        <!-- PDF Overlay Modal (Desktop Only) -->
+        <div 
+          id="pdf-overlay" 
+          class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div class="relative w-full max-w-5xl h-[90vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate pr-4">{post.data.title}</h3>
+              <button 
+                id="pdf-close-btn"
+                class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-white"
+                aria-label="Close PDF"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Modal Content -->
+            <div class="flex-1 bg-gray-100 dark:bg-slate-950 relative">
+              <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-950">
+                <div class="animate-spin rounded-full h-10 w-10 border-4 border-indigo-500 border-t-transparent"></div>
+              </div>
+              <iframe
+                id="pdf-iframe"
+                class="w-full h-full border-none opacity-0 transition-opacity duration-300"
+                title="PDF Viewer"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </div>
     )}
@@ -198,5 +235,81 @@ const relatedPosts = posts
   )}
 
   <Fragment slot="footer"><Footer /></Fragment>
+
+  <script>
+    const viewLink = document.getElementById('pdf-view-link');
+    const overlay = document.getElementById('pdf-overlay');
+    const closeBtn = document.getElementById('pdf-close-btn');
+    const iframe = document.getElementById('pdf-iframe') as HTMLIFrameElement;
+    const loader = document.getElementById('pdf-loader');
+
+    function openModal(e: MouseEvent) {
+      // Only open overlay on desktop (sm breakpoint and up)
+      if (window.innerWidth < 640) return;
+
+      e.preventDefault();
+      if (!overlay || !iframe || !viewLink) return;
+
+      const pdfUrl = viewLink.getAttribute('href');
+      if (!pdfUrl) return;
+
+      // Show overlay
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+
+      // Load PDF
+      iframe.src = pdfUrl;
+      iframe.onload = () => {
+        if (loader) loader.classList.add('hidden');
+        iframe.classList.remove('opacity-0');
+      };
+
+      // Add history state so back button closes modal
+      window.history.pushState({ modalOpen: true }, '');
+    }
+
+    function closeModal() {
+      if (!overlay || !iframe) return;
+      
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+      document.body.style.overflow = '';
+      iframe.src = '';
+      if (loader) loader.classList.remove('hidden');
+      iframe.classList.add('opacity-0');
+
+      // If we have a modal state in history, go back
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
+    }
+
+    // Handle back button
+    window.addEventListener('popstate', (event) => {
+      if (overlay && !overlay.classList.contains('hidden')) {
+        // Close modal without calling history.back() again
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+        if (iframe) iframe.src = '';
+      }
+    });
+
+    viewLink?.addEventListener('click', openModal);
+    closeBtn?.addEventListener('click', closeModal);
+    
+    // Close on backdrop click
+    overlay?.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    // Close on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+  </script>
 </BaseLayout>
 
