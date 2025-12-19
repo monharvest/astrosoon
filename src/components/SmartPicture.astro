@@ -58,6 +58,9 @@ const fallback = (() => {
   }
   return src;
 })();
+
+const [aspectW, aspectH] = aspect.split('/').map(Number);
+const aspectRatio = aspectW / aspectH;
 ---
 <figure class={`relative overflow-hidden ${klass} ${height ? height : (aspect ? `aspect-[${aspect}]` : '')}`}>
   <picture class="block w-full h-full">
@@ -71,7 +74,7 @@ const fallback = (() => {
       decoding="async"
       fetchpriority={fetchpriority}
       width={widths[widths.length - 1]}
-      height={height ? undefined : (aspect ? Math.round(widths[widths.length - 1] / eval(aspect)) : undefined)}
+      height={height ? undefined : (aspect ? Math.round(widths[widths.length - 1] / aspectRatio) : undefined)}
     />
   </picture>
   <slot />
