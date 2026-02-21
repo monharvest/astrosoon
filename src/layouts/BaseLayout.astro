@@ -1,5 +1,6 @@
 ---
 import { pwaInfo } from 'virtual:pwa-info';
+import { ViewTransitions } from 'astro:transitions';
 import PWAInstallPrompt from '../components/PWAInstallPrompt.astro';
 
 const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын тухай нийтлэлүүд', metaImage } = Astro.props;
@@ -11,6 +12,10 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url.href} />
     {metaImage && <meta property="og:image" content={metaImage} />}
     
     <!-- PWA Meta Tags -->
@@ -26,6 +31,16 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <ViewTransitions />
+
+    <!-- Prevent FOUC: apply theme before first paint -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
   </head>
   <body class="preload min-h-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans">
     <slot name="header" />
@@ -35,22 +50,14 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     </main>
     <slot name="footer" />
     <PWAInstallPrompt />
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-    <script src="/src/pwa.ts"></script>
+    <script>
+      import '../pwa.ts';
+    </script>
     <script>
       // Remove preload class after page loads to enable transitions
       window.addEventListener('load', () => {
         document.body.classList.remove('preload');
       });
-      
-      // Initialize theme immediately to prevent flash
-      (function() {
-        const theme = localStorage.getItem('theme') || 
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        }
-      })();
     </script>
   </body>
 </html>
