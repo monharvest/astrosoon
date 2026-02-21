@@ -6,7 +6,7 @@ category: Сайн мэдээ
 tags:
   - сайн мэдээ
   - аврал
-heroImage: /posts/death2.jpeg
+heroImage: ../../assets/posts/death2.jpeg
 featured: false
 pdfUrl: /pdfs/bayan-khun-lazar-khoyor-2.pdf
 ---

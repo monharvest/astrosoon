@@ -6,7 +6,7 @@ category: Advent
 tags:
   - advent
   - бэлтгэл
-heroImage: /posts/advent4.webp
+heroImage: ../../assets/posts/advent4.webp
 featured: false
 pdfUrl: /pdfs/undestnuuded-zoriulsan-sayn-medee-9.pdf
 ---

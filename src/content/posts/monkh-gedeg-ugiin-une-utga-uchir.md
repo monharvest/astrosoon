@@ -8,7 +8,7 @@ category: Мөнх үгийн ойлголт
 tags:
   - мөнх
   - итгэл
-heroImage: https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop
+heroImage: ../../assets/posts/monkh-gedeg-hero.webp
 featured: true
 pdfUrl: /pdfs/monkh-1.pdf
 ---

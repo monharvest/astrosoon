@@ -4,7 +4,7 @@ description: "Итгэлийн үндэслэл, Библийн тайлбар, 
 pubDate: "2025-10-11"
 category: "Мөнх үгийн ойлголт"
 tags: ["итгэл"]
-heroImage: "https://images.unsplash.com/photo-1517832207067-4db24a2ae47c?q=80&w=1600&auto=format&fit=crop"
+heroImage: ../../assets/posts/itgel-hero.webp
 ---
 
 Итгэл бол хүний амьдралын үндэс суурь юм. Энэ нь зөвхөн үг биш, үйлдэл болон бодит амьдрал дээр хэрэгждэг.

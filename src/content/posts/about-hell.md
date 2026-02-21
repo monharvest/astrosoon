@@ -6,7 +6,7 @@ category: Тамын тухай
 tags:
   - там
   - сэрэмжлүүлэг
-heroImage: /posts/death2.jpeg
+heroImage: ../../assets/posts/death2.jpeg
 featured: false
 pdfUrl: /pdfs/ukhel-10.pdf
 ---

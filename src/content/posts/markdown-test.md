@@ -6,7 +6,7 @@ category: Сайн мэдээ
 tags:
   - markdown
   - туршилт
-heroImage: /olive.jpg
+heroImage: ../../assets/posts/olive.jpg
 featured: false
 pdfUrl: /pdfs/sayn-samari-khun-khen-be.pdf
 ---

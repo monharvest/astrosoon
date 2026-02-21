@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import SmartPicture from '../../components/SmartPicture.astro';
 import { getCollection } from 'astro:content';
 import { categoryClasses } from '../../utils/categoryStyles';
 import { Image } from 'astro:assets';
@@ -41,7 +42,7 @@ const relatedPosts = posts
   .sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate))
   .slice(0, 3);
 ---
-<BaseLayout title={post.data.title} description={post.data.description} metaImage={post.data.heroImage}>
+<BaseLayout title={post.data.title} description={post.data.description} metaImage={post.data.heroImage?.src}>
   <Fragment slot="header"><Header /></Fragment>
 
   <article class="mx-auto max-w-3xl my-10">
@@ -170,9 +171,16 @@ const relatedPosts = posts
           return (
             <article class="card h-full flex flex-col overflow-hidden post-card" data-category={relatedPost.data.category}>
               <a href={`/posts/${relatedPost.slug}`} class="block overflow-hidden">
-                <figure class="relative h-40 w-full overflow-hidden">
-                  <Image src={imageSrc} alt={relatedPost.data.title} class="h-full w-full object-cover transition duration-200 hover:scale-105" loading={index < 2 ? "eager" : "lazy"} width={400} height={160} />
-                </figure>
+                <SmartPicture
+                  src={imageSrc}
+                  alt={relatedPost.data.title}
+                  widths={[320, 480, 640]}
+                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                  height="h-40"
+                  quality={60}
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                  class="rounded-none"
+                />
               </a>
 
               <div class={`bg-gradient-to-r ${relatedGradient} p-4 text-white`}>

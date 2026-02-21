@@ -1,8 +1,8 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z, image } from 'astro:content';
 
 const posts = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image: img }) => z.object({
     title: z.string(),
     description: z.string().optional(),
     pubDate: z.union([z.string(), z.date()]).transform((val) => {
@@ -19,7 +19,7 @@ const posts = defineCollection({
     }),
     category: z.string(),
     tags: z.array(z.string()).default([]),
-    heroImage: z.string().optional(),
+    heroImage: img().optional(),
     featured: z.boolean().default(false),
     pdfUrl: z.string().optional()
   })

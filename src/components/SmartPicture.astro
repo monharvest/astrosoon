@@ -1,12 +1,15 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-  src: string;
+  src: string | ImageMetadata;
   alt: string;
   widths?: number[];
   sizes?: string;
-  aspect?: string; // e.g. "3/2", "4/3", "16/9"
-  height?: string; // e.g. "h-48", "h-64" - overrides aspect
-  quality?: number; // 55-65 is usually fine
+  aspect?: string;
+  height?: string;
+  quality?: number;
   loading?: 'eager' | 'lazy';
   fetchpriority?: 'high' | 'low' | 'auto';
   class?: string;
@@ -25,18 +28,20 @@ const {
   class: klass = '',
 } = Astro.props as Props;
 
-function buildSrcset(format: 'avif' | 'webp' | 'jpeg') {
-  const isUnsplash = src.includes('images.unsplash.com');
-  if (!isUnsplash) return undefined;
+const isImageMeta = typeof src === 'object';
+const isUnsplash = typeof src === 'string' && src.includes('images.unsplash.com');
 
+function buildSrcset(format: 'avif' | 'webp') {
+  if (!isUnsplash) return undefined;
+  const strSrc = src as string;
   return widths
     .map((w) => {
-      const u = new URL(src);
+      const u = new URL(strSrc);
       u.searchParams.set('w', String(w));
       u.searchParams.set('fit', 'crop');
       u.searchParams.set('q', String(quality));
       u.searchParams.set('auto', 'format');
-      if (format !== 'jpeg') u.searchParams.set('fm', format);
+      u.searchParams.set('fm', format);
       return `${u.toString()} ${w}w`;
     })
     .join(', ');
@@ -44,39 +49,61 @@ function buildSrcset(format: 'avif' | 'webp' | 'jpeg') {
 
 const avifSet = buildSrcset('avif');
 const webpSet = buildSrcset('webp');
-const isRemoteOptimizable = Boolean(avifSet || webpSet);
 
-const fallback = (() => {
-  // For remote Unsplash, use the largest candidate; otherwise use original src.
-  if (isRemoteOptimizable) {
-    const u = new URL(src);
-    u.searchParams.set('w', String(Math.max(...widths)));
-    u.searchParams.set('fit', 'crop');
-    u.searchParams.set('q', String(quality));
-    u.searchParams.set('auto', 'format');
-    return u.toString();
-  }
-  return src;
+const unsplashFallback = (() => {
+  if (!isUnsplash) return src as string;
+  const u = new URL(src as string);
+  u.searchParams.set('w', String(Math.max(...widths)));
+  u.searchParams.set('fit', 'crop');
+  u.searchParams.set('q', String(quality));
+  u.searchParams.set('auto', 'format');
+  return u.toString();
 })();
 
 const [aspectW, aspectH] = aspect.split('/').map(Number);
 const aspectRatio = aspectW / aspectH;
+const maxWidth = widths[widths.length - 1];
+const computedHeight = Math.round(maxWidth / aspectRatio);
 ---
 <figure class={`relative overflow-hidden ${klass} ${height ? height : (aspect ? `aspect-[${aspect}]` : '')}`}>
-  <picture class="block w-full h-full">
-    {avifSet && <source type="image/avif" srcset={avifSet} sizes={sizes} />}
-    {webpSet && <source type="image/webp" srcset={webpSet} sizes={sizes} />}
+  {isImageMeta ? (
+    <Image
+      src={src as ImageMetadata}
+      alt={alt}
+      width={maxWidth}
+      height={computedHeight}
+      quality={quality}
+      class="h-full w-full object-cover"
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  ) : isUnsplash ? (
+    <picture class="block w-full h-full">
+      {avifSet && <source type="image/avif" srcset={avifSet} sizes={sizes} />}
+      {webpSet && <source type="image/webp" srcset={webpSet} sizes={sizes} />}
+      <img
+        src={unsplashFallback}
+        alt={alt}
+        class="h-full w-full object-cover"
+        loading={loading}
+        decoding="async"
+        fetchpriority={fetchpriority}
+        width={maxWidth}
+        height={computedHeight}
+      />
+    </picture>
+  ) : (
     <img
-      src={fallback}
+      src={src as string}
       alt={alt}
       class="h-full w-full object-cover"
       loading={loading}
       decoding="async"
       fetchpriority={fetchpriority}
-      width={widths[widths.length - 1]}
-      height={height ? undefined : (aspect ? Math.round(widths[widths.length - 1] / aspectRatio) : undefined)}
+      width={maxWidth}
+      height={computedHeight}
     />
-  </picture>
+  )}
   <slot />
-  
 </figure>

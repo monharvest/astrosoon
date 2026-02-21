@@ -6,7 +6,7 @@ category: Сургаалт зүйрлэлүүд
 tags:
   - зүйрлэл
   - сургамж
-heroImage: /posts/advent4.webp
+heroImage: ../../assets/posts/advent4.webp
 featured: false
 ---
 
