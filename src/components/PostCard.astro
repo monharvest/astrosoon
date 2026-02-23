@@ -28,9 +28,6 @@ const categorySlug = slugify(post.data.category);
 
   <div class={`bg-gradient-to-r ${gradient} p-4 text-white`}>
     <div class="badge text-xs">{post.data.category}</div>
-    <h3 class="mt-3 text-lg font-semibold leading-snug">
-      <a href={`/posts/${post.slug}`} class="hover:underline">{post.data.title}</a>
-    </h3>
   </div>
 
   <div class="p-4 flex-1">

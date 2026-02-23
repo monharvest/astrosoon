@@ -39,16 +39,42 @@
         filterButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
 
-        // Filter cards
-        postCards.forEach(card => {
-          const postCategory = (card as HTMLElement).dataset.category;
-          if (category === 'all' || postCategory === category) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        });
+        if (category === 'all') {
+          // Show only the first post per category
+          const seen = new Set<string>();
+          postCards.forEach(card => {
+            const postCategory = (card as HTMLElement).dataset.category ?? '';
+            if (!seen.has(postCategory)) {
+              seen.add(postCategory);
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        } else {
+          // Show all posts in the selected category
+          postCards.forEach(card => {
+            const postCategory = (card as HTMLElement).dataset.category;
+            if (postCategory === category) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        }
       });
+    });
+
+    // Apply "all" logic on initial load
+    const seen = new Set<string>();
+    postCards.forEach(card => {
+      const postCategory = (card as HTMLElement).dataset.category ?? '';
+      if (!seen.has(postCategory)) {
+        seen.add(postCategory);
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
     });
   }
 
