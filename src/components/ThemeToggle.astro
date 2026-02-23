@@ -15,6 +15,8 @@
 </button>
 
 <script>
+  const themeListenerKey = '__udaxgui_theme_listeners_bound__';
+
   // Get theme from localStorage or system preference
   const getTheme = () => {
     const stored = localStorage.getItem('theme');
@@ -22,43 +24,47 @@
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
 
-  // Apply theme: update <html> class and icon visibility
-  const applyTheme = (theme: string) => {
+  // Render theme state in DOM (optionally persist to localStorage)
+  const applyTheme = (theme: string, persist = false) => {
     const darkIcons = document.querySelectorAll('.theme-toggle-dark-icon');
     const lightIcons = document.querySelectorAll('.theme-toggle-light-icon');
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
       lightIcons.forEach(icon => icon?.classList.remove('hidden'));
       darkIcons.forEach(icon => icon?.classList.add('hidden'));
-      localStorage.setItem('theme', 'dark');
+      if (persist) localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
       lightIcons.forEach(icon => icon?.classList.add('hidden'));
       darkIcons.forEach(icon => icon?.classList.remove('hidden'));
-      localStorage.setItem('theme', 'light');
+      if (persist) localStorage.setItem('theme', 'light');
     }
   };
 
   // Re-apply correct icon state on every page load / navigation.
   // Only updates icons — no event listeners registered here, so no duplicates.
-  const syncThemeIcons = () => applyTheme(getTheme());
+  const syncThemeIcons = () => applyTheme(getTheme(), false);
 
-  // Use event delegation on document so the click handler is registered ONCE
-  // and is never duplicated across page navigations or multiple instances.
-  document.addEventListener('click', (e) => {
-    const btn = (e.target as Element).closest('.theme-toggle');
-    if (btn) {
-      const isDark = document.documentElement.classList.contains('dark');
-      applyTheme(isDark ? 'light' : 'dark');
-    }
-  });
+  if (!(window as any)[themeListenerKey]) {
+    // Use event delegation on document so the click handler is registered ONCE
+    // and is never duplicated across page navigations or multiple instances.
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest('.theme-toggle');
+      if (btn) {
+        const isDark = document.documentElement.classList.contains('dark');
+        applyTheme(isDark ? 'light' : 'dark', true);
+      }
+    });
 
-  // Listen for system theme changes (registered once)
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
-  });
+    // Listen for system theme changes (registered once)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light', false);
+      }
+    });
+
+    (window as any)[themeListenerKey] = true;
+  }
 
   // Sync icons on initial load and after every View Transitions navigation
   syncThemeIcons();

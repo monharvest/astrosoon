@@ -20,14 +20,20 @@ const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
 const getEncodedAssetUrl = (url: string | undefined) => {
   if (!url) return undefined;
   try {
-    if (/^https?:\/\//i.test(url)) return url;
-    const origin = Astro.site ?? new URL(Astro.url).origin;
-    const urlObj = new URL(url, origin);
+    const isAbsolute = /^https?:\/\//i.test(url);
+    const urlObj = isAbsolute
+      ? new URL(url)
+      : new URL(url, 'https://placeholder.local');
     const encodedPath = urlObj.pathname
       .split('/')
       .map(segment => (segment ? encodeURIComponent(decodeURIComponent(segment)) : segment))
       .join('/');
-    return `${urlObj.origin}${encodedPath}`;
+
+    if (isAbsolute) {
+      return `${urlObj.origin}${encodedPath}${urlObj.search}${urlObj.hash}`;
+    }
+
+    return `${encodedPath}${urlObj.search}${urlObj.hash}`;
   } catch (err) {
     console.warn('Failed to encode asset url', err);
     return url;

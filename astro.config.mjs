@@ -5,7 +5,7 @@ import critters from 'astro-critters';
 import AstroPWA from '@vite-pwa/astro';
 
 export default defineConfig({
-  site: 'https://astrosoon.pages.dev',
+  site: 'https://udaxgui.com',
   integrations: [
     tailwind(),
     sitemap(),
