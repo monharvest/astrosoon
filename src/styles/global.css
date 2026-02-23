@@ -47,6 +47,20 @@ img {
   height: auto;
 }
 
+/* Fix CLS: <picture> is display:inline by default which collapses
+   aspect-ratio containers before the image loads. Make it fill its parent. */
+figure picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Override global height:auto for images inside aspect-ratio figures
+   so h-full actually works and space is reserved before load. */
+figure img {
+  height: 100%;
+}
+
 /* Dark mode transitions */
 * {
   @apply transition-colors duration-200;
