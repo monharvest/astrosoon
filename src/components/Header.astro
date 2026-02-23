@@ -46,51 +46,121 @@ const categories = [
         <!-- Theme Toggle -->
         <ThemeToggle />
 
-        <!-- Mobile Menu Toggle -->
-        <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Toggle menu">
-          <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <!-- Mobile Menu Toggle (hamburger) -->
+        <button id="mobile-menu-toggle" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Toggle menu" aria-expanded="false">
+          <!-- Hamburger icon -->
+          <svg id="menu-icon-open" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <!-- Close icon -->
+          <svg id="menu-icon-close" class="h-5 w-5 text-white hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>
     </div>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-gradient-to-r from-gray-600 to-gray-700 border-t border-white/10 -mx-4 sm:-mx-6 px-4 sm:px-6 mt-4">
-      <nav class="py-4">
-        <h3 class="text-white/70 text-sm font-medium mb-3">Ангилалууд</h3>
-        <div class="space-y-2">
-          {categories.map((category) => (
-            <a 
-              class="block px-3 py-2 text-white hover:bg-white/10 rounded-lg transition" 
-              href={category.href}
-            >
-              {category.label}
-            </a>
-          ))}
-        </div>
-      </nav>
-    </div>
   </div>
 </header>
 
+<!-- Backdrop -->
+<div
+  id="mobile-menu-backdrop"
+  class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+  aria-hidden="true"
+></div>
+
+<!-- Slide-in Drawer -->
+<div
+  id="mobile-menu"
+  class="fixed top-0 right-0 z-50 h-full w-72 max-w-[85vw] bg-gray-700 dark:bg-gray-900 shadow-2xl flex flex-col translate-x-full transition-transform duration-300 ease-in-out md:hidden"
+  aria-label="Mobile navigation"
+>
+  <!-- Drawer header -->
+  <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
+    <span class="font-semibold text-white">Udaxgui.com</span>
+    <button id="mobile-menu-close" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition" aria-label="Close menu">
+      <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Category links -->
+  <nav class="px-4 pt-5 pb-3 flex-1 overflow-y-auto">
+    <div class="space-y-1">
+      {categories.map((category) => (
+        <a class="flex items-center gap-3 px-3 py-2.5 text-white hover:bg-white/10 rounded-xl transition text-sm font-medium" href={category.href}>
+          {category.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</div>
+
 <script>
-  function initMobileMenu() {
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+  const openMobileMenu = () => {
+    const drawer = document.getElementById('mobile-menu');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    drawer?.classList.remove('translate-x-full');
+    backdrop?.classList.remove('opacity-0', 'pointer-events-none');
+    backdrop?.classList.add('opacity-100');
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+    toggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
 
-    mobileMenuToggle?.addEventListener('click', () => {
-      mobileMenu?.classList.toggle('hidden');
-    });
+  const closeMobileMenu = () => {
+    const drawer = document.getElementById('mobile-menu');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    drawer?.classList.add('translate-x-full');
+    backdrop?.classList.add('opacity-0', 'pointer-events-none');
+    backdrop?.classList.remove('opacity-100');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
 
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('#mobile-menu-toggle') && !target.closest('#mobile-menu')) {
-        mobileMenu?.classList.add('hidden');
-      }
-    });
-  }
+  // Single delegated click listener — registered once, never stale
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
 
-  // Run on first load and after every View Transition navigation
-  document.addEventListener('astro:page-load', initMobileMenu);
+    if (target.closest('#mobile-menu-toggle')) {
+      const drawer = document.getElementById('mobile-menu');
+      const isOpen = !drawer?.classList.contains('translate-x-full');
+      isOpen ? closeMobileMenu() : openMobileMenu();
+      return;
+    }
+
+    if (target.closest('#mobile-menu-close')) {
+      closeMobileMenu();
+      return;
+    }
+
+    // Backdrop click (outside the drawer)
+    if (target.id === 'mobile-menu-backdrop') {
+      closeMobileMenu();
+      return;
+    }
+
+    // Close when a drawer link is tapped
+    if (target.closest('#mobile-menu a')) {
+      closeMobileMenu();
+    }
+  });
+
+  // Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileMenu();
+  });
+
+  // Close menu on navigation (body overflow must be reset)
+  document.addEventListener('astro:before-preparation', () => closeMobileMenu());
 </script>

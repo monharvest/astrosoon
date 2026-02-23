@@ -15,56 +15,52 @@
 </button>
 
 <script>
-  function initTheme() {
-    const themeToggleDarkIcons = document.querySelectorAll('.theme-toggle-dark-icon');
-    const themeToggleLightIcons = document.querySelectorAll('.theme-toggle-light-icon');
-    const themeToggleBtns = document.querySelectorAll('.theme-toggle');
+  // Get theme from localStorage or system preference
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
 
-    // Get theme from localStorage or system preference
-    const getTheme = () => {
-      const stored = localStorage.getItem('theme');
-      if (stored) return stored;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
+  // Apply theme: update <html> class and icon visibility
+  const applyTheme = (theme: string) => {
+    const darkIcons = document.querySelectorAll('.theme-toggle-dark-icon');
+    const lightIcons = document.querySelectorAll('.theme-toggle-light-icon');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      lightIcons.forEach(icon => icon?.classList.remove('hidden'));
+      darkIcons.forEach(icon => icon?.classList.add('hidden'));
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      lightIcons.forEach(icon => icon?.classList.add('hidden'));
+      darkIcons.forEach(icon => icon?.classList.remove('hidden'));
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
-    // Set theme
-    const setTheme = (theme: string) => {
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-        themeToggleLightIcons.forEach(icon => icon?.classList.remove('hidden'));
-        themeToggleDarkIcons.forEach(icon => icon?.classList.add('hidden'));
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        themeToggleLightIcons.forEach(icon => icon?.classList.add('hidden'));
-        themeToggleDarkIcons.forEach(icon => icon?.classList.remove('hidden'));
-        localStorage.setItem('theme', 'light');
-      }
-    };
+  // Re-apply correct icon state on every page load / navigation.
+  // Only updates icons — no event listeners registered here, so no duplicates.
+  const syncThemeIcons = () => applyTheme(getTheme());
 
-    // Initialize theme
-    const currentTheme = getTheme();
-    setTheme(currentTheme);
+  // Use event delegation on document so the click handler is registered ONCE
+  // and is never duplicated across page navigations or multiple instances.
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest('.theme-toggle');
+    if (btn) {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+  });
 
-    // Toggle theme on all buttons
-    themeToggleBtns.forEach(btn => {
-      btn?.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        setTheme(isDark ? 'light' : 'dark');
-      });
-    });
+  // Listen for system theme changes (registered once)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
 
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
-      }
-    });
-  }
-
-  // Initialize immediately
-  initTheme();
-
-  // Reinitialize on navigation
-  document.addEventListener('astro:page-load', initTheme);
+  // Sync icons on initial load and after every View Transitions navigation
+  syncThemeIcons();
+  document.addEventListener('astro:page-load', syncThemeIcons);
 </script>
