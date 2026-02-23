@@ -26,9 +26,9 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Udaxgui" />
     
-    <!-- Preload critical fonts to prevent layout shift -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload self-hosted Inter Variable (cyrillic for Mongolian, latin for UI) -->
+    <link rel="preload" href="/fonts/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
     
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <ViewTransitions />

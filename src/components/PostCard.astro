@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import SmartPicture from './SmartPicture.astro';
 import { categoryClasses } from '../utils/categoryStyles';
 import { slugify } from '../utils/slug';
-const { post, index = 0 } = Astro.props as { post: CollectionEntry<'posts'>, index?: number };
+const { post, index = 0, hidden = false } = Astro.props as { post: CollectionEntry<'posts'>, index?: number, hidden?: boolean };
 const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
 const fallbackImage = 'https://images.unsplash.com/photo-1517817748490-0c953d85a371?q=80&w=1200&auto=format&fit=crop';
 const imageSrc = post.data.heroImage ?? fallbackImage;
@@ -11,7 +11,7 @@ const imageSrc = post.data.heroImage ?? fallbackImage;
 // Convert category to slug for data attribute
 const categorySlug = slugify(post.data.category);
 ---
-<article class="card h-full flex flex-col overflow-hidden post-card rounded-2xl" data-category={categorySlug}>
+<article class={`card h-full flex flex-col overflow-hidden post-card rounded-2xl${hidden ? ' hidden' : ''}`} data-category={categorySlug}>
   <a href={`/posts/${post.slug}`} class="block overflow-hidden">
     <SmartPicture
       src={imageSrc}

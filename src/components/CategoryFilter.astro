@@ -23,7 +23,7 @@
 </style>
 
 <script>
-  // Category filtering functionality
+  // Initialize: events only — initial visible state is set by SSR in PostGrid
   function initCategoryFilter() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const postCards = document.querySelectorAll('.post-card');
@@ -63,18 +63,6 @@
           });
         }
       });
-    });
-
-    // Apply "all" logic on initial load
-    const seen = new Set<string>();
-    postCards.forEach(card => {
-      const postCategory = (card as HTMLElement).dataset.category ?? '';
-      if (!seen.has(postCategory)) {
-        seen.add(postCategory);
-        card.classList.remove('hidden');
-      } else {
-        card.classList.add('hidden');
-      }
     });
   }
 

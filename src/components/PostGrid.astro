@@ -1,11 +1,26 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import PostCard from './PostCard.astro';
-const { posts } = Astro.props as { posts: CollectionEntry<'posts'>[] };
+const { posts, showOnePerCategory = false } = Astro.props as {
+  posts: CollectionEntry<'posts'>[];
+  showOnePerCategory?: boolean;
+};
+
+// Compute initial hidden state server-side so no JS-driven CLS on first paint
+const seenCategories = new Set<string>();
+const postsWithVisibility = posts.map((p) => {
+  if (!showOnePerCategory) return { post: p, hidden: false };
+  const cat = p.data.category ?? '';
+  if (seenCategories.has(cat)) return { post: p, hidden: true };
+  seenCategories.add(cat);
+  return { post: p, hidden: false };
+});
 ---
 <section>
   <h2 class="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Нийтлэлүүд</h2>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {posts.map((p, index) => <PostCard post={p} index={index} />)}
+    {postsWithVisibility.map(({ post, hidden }, index) => (
+      <PostCard post={post} index={index} hidden={hidden} />
+    ))}
   </div>
 </section>
