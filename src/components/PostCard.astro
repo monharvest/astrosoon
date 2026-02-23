@@ -11,7 +11,7 @@ const imageSrc = post.data.heroImage ?? fallbackImage;
 // Convert category to slug for data attribute
 const categorySlug = slugify(post.data.category);
 ---
-<article class="card h-full flex flex-col overflow-hidden post-card" data-category={categorySlug}>
+<article class="card h-full flex flex-col overflow-hidden post-card rounded-2xl" data-category={categorySlug}>
   <a href={`/posts/${post.slug}`} class="block overflow-hidden">
     <SmartPicture
       src={imageSrc}

@@ -75,19 +75,22 @@ const categories = [
 </header>
 
 <script>
-  // Mobile menu toggle
-  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
+  function initMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-  mobileMenuToggle?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
+    mobileMenuToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+    });
 
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('#mobile-menu-toggle') && !target.closest('#mobile-menu')) {
-      mobileMenu?.classList.add('hidden');
-    }
-  });
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('#mobile-menu-toggle') && !target.closest('#mobile-menu')) {
+        mobileMenu?.classList.add('hidden');
+      }
+    });
+  }
+
+  // Run on first load and after every View Transition navigation
+  document.addEventListener('astro:page-load', initMobileMenu);
 </script>
