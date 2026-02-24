@@ -20,7 +20,7 @@ export default defineConfig({
       mode: 'production',
       base: '/',
       scope: '/',
-      includeAssets: ['favicon.svg', 'robots.txt', 'pdfs/**/*.pdf'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt', 'pdfs/**/*.pdf'],
       registerType: 'autoUpdate',
       manifest: {
         name: 'Udaxgui.com - Итгэл ба Амьдрал',
@@ -33,6 +33,11 @@ export default defineConfig({
         scope: '/',
         start_url: '/',
         icons: [
+          {
+            src: '/favicon.ico',
+            sizes: '48x48',
+            type: 'image/x-icon',
+          },
           {
             src: '/pwa-192x192.png',
             sizes: '192x192',
