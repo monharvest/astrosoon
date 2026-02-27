@@ -38,7 +38,6 @@ collections:
         widget: select
         options:
           - Сайн мэдээ
-          - Advent
           - Үхэл ба амилал
           - Сургаалт зүйрлэлүүд
           - Мөнх үгийн ойлголт
