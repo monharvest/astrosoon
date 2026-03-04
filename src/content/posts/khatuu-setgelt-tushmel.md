@@ -4,7 +4,7 @@ description: "Уучлал өршөөл цуцлагдах боломжтой ю
 pubDate: "2026-02-23"
 category: "Сургаалт зүйрлэлүүд"
 tags: ["сургаалт зүйрлэлүүд"]
-heroImage: ../../assets/posts/hatuusetgelt.webp
+heroImage: ../../assets/posts/khatuusetgelt.webp
 featured: false
 pdfUrl: "/pdfs/khatuu-setgelt-tushmel.pdf"
 ---

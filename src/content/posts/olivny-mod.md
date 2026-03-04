@@ -4,7 +4,7 @@ description: "Ром 11 дахь чидун модны зүйрлэлийг Па
 pubDate: "2026-02-23"
 category: "Сургаалт зүйрлэлүүд"
 tags: ["сургаалт зүйрлэлүүд"]
-heroImage: ../../assets/posts/olive.jpg
+heroImage: ../../assets/posts/olive.webp
 featured: false
 pdfUrl: "/pdfs/olivny-mod.pdf"
 ---

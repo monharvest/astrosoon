@@ -4,7 +4,7 @@ description: "Есүсийн ярьсан Сайн Самари хүний ту�
 pubDate: "2026-02-23"
 category: "Сургаалт зүйрлэлүүд"
 tags: ["сургаалт зүйрлэлүүд"]
-heroImage: ../../assets/posts/thumbnail 1.jpg
+heroImage: ../../assets/posts/sainsamari.webp
 featured: false
 pdfUrl: "/pdfs/sayn-samari-khun-khen-be.pdf"
 ---

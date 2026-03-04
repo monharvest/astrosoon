@@ -14,7 +14,18 @@ export async function getStaticPaths() {
 
 const { category } = Astro.params;
 const all = await getCollection('posts');
-const active = all.filter((p) => slugify(p.data.category) === category);
+const getImageOrder = (p: (typeof all)[number]) => {
+  const match = (p.data.pdfUrl ?? '').match(/(\d+)\.pdf$/);
+  return match ? parseInt(match[1]) : Infinity;
+};
+
+const active = all
+  .filter((p) => slugify(p.data.category) === category)
+  .sort((a, b) => {
+    const dateDiff = +new Date(b.data.pubDate) - +new Date(a.data.pubDate);
+    if (dateDiff !== 0) return dateDiff;
+    return getImageOrder(a) - getImageOrder(b);
+  });
 ---
 <BaseLayout title={`Ангилал: ${category}`}>
   <Fragment slot="header"><Header /></Fragment>
