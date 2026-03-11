@@ -3,18 +3,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import SmartPicture from '../../components/SmartPicture.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { categoryClasses } from '../../utils/categoryStyles';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
-  return posts.map((post) => ({ params: { slug: post.slug } }));
+  return posts.map((post) => ({ params: { slug: post.id } }));
 }
 
 const posts = await getCollection('posts');
-const post = posts.find((p) => p.slug === Astro.params.slug)!;
-const { Content } = await post.render();
+const post = posts.find((p) => p.id === Astro.params.slug)!;
+const { Content } = await render(post);
 const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
 
 const getEncodedAssetUrl = (url: string | undefined) => {
@@ -44,7 +44,7 @@ const pdfHref = getEncodedAssetUrl(post.data.pdfUrl);
 
 // Get related posts (same category, excluding current post)
 const relatedPosts = posts
-  .filter(p => p.data.category === post.data.category && p.slug !== post.slug)
+  .filter(p => p.data.category === post.data.category && p.id !== post.id)
   .sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate))
   .slice(0, 3);
 ---
@@ -176,7 +176,7 @@ const relatedPosts = posts
           const imageSrc = relatedPost.data.heroImage ?? fallbackImage;
           return (
             <article class="card h-full flex flex-col overflow-hidden post-card rounded-2xl" data-category={relatedPost.data.category}>
-              <a href={`/posts/${relatedPost.slug}`} class="block overflow-hidden">
+              <a href={`/posts/${relatedPost.id}`} class="block overflow-hidden">
                 <SmartPicture
                   src={imageSrc}
                   alt={relatedPost.data.title}
@@ -199,7 +199,7 @@ const relatedPosts = posts
 
               <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>{new Date(relatedPost.data.pubDate).toLocaleDateString('mn-MN')}</span>
-                <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${relatedPost.slug}`}>Унших →</a>
+                <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${relatedPost.id}`}>Унших →</a>
               </div>
             </article>
           );

@@ -16,7 +16,7 @@ const featured = sorted.find((p) => p.data.featured) ?? sorted[0];
   <Fragment slot="hero"><Hero post={featured} /></Fragment>
 
   <CategoryFilter />
-  <PostGrid posts={sorted.filter((p) => p.slug !== featured.slug)} showOnePerCategory={true} />
+  <PostGrid posts={sorted.filter((p) => p.id !== featured.id)} showOnePerCategory={true} />
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>
