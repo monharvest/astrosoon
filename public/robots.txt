@@ -7,4 +7,4 @@ Allow: /
 # Disallow: /private/
 
 # Sitemap location
-Sitemap: https://astrosoon.pages.dev/sitemap.xml
+Sitemap: https://udaxgui.com/sitemap.xml
