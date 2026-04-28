@@ -11,26 +11,15 @@ const posts = await getCollection('posts');
 const sorted = posts.sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate));
 const featured = sorted.find((p) => p.data.featured) ?? sorted[0];
 
-// Build grid: one per category, then pin Сайн Самари if not already included
+// All posts except the featured hero post
 const remaining = sorted.filter((p) => p.id !== featured.id);
-const seenCats = new Set<string>();
-const onePerCat = remaining.filter((p) => {
-  const cat = p.data.category ?? '';
-  if (seenCats.has(cat)) return false;
-  seenCats.add(cat);
-  return true;
-});
-const pinned = remaining.find((p) => p.id === 'sayn-samari-khun-khen-be');
-const gridPosts = pinned && !onePerCat.some((p) => p.id === 'sayn-samari-khun-khen-be')
-  ? [...onePerCat, pinned]
-  : onePerCat;
 ---
 <BaseLayout title="Udaxgui.com" description="Итгэл, найдвар, хайр — нийтлэлүүд">
   <Fragment slot="header"><Header /></Fragment>
   <Fragment slot="hero"><Hero post={featured} /></Fragment>
 
   <CategoryFilter />
-  <PostGrid posts={gridPosts} showOnePerCategory={false} />
+  <PostGrid posts={remaining} showOnePerCategory={true} />
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>
