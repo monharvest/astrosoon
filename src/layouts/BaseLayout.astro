@@ -3,7 +3,12 @@ import { pwaInfo } from 'virtual:pwa-info';
 import { ClientRouter } from 'astro:transitions';
 import PWAInstallPrompt from '../components/PWAInstallPrompt.astro';
 
-const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын тухай нийтлэлүүд', metaImage } = Astro.props;
+const {
+  title = 'Udaxgui.com',
+  description = 'Итгэл ба амьдралын тухай нийтлэлүүд',
+  metaImage,
+  robots = 'index,follow',
+} = Astro.props;
 ---
 <html lang="mn" class="h-full">
   <head>
@@ -12,6 +17,7 @@ const { title = 'Udaxgui.com', description = 'Итгэл ба амьдралын
     
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

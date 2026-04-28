@@ -8,7 +8,9 @@ export default defineConfig({
   site: 'https://udaxgui.com',
   integrations: [
     tailwind(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.endsWith('/admin/') && !page.endsWith('/offline/'),
+    }),
     critters({
       preload: 'swap',
       inlineFonts: true,
