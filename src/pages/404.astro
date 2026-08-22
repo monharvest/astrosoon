@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCategories } from '../utils/categories';
+
+const categories = await getCategories();
+---
+<BaseLayout title="Хуудас олдсонгүй - Udaxgui.com" description="Хүсэлт гаргасан хуудас олдсонгүй." robots="noindex,follow">
+  <Fragment slot="header"><Header /></Fragment>
+
+  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+    <p class="text-6xl font-bold text-slate-300 dark:text-slate-700">404</p>
+    <h1 class="mt-4 text-3xl font-bold text-gray-900 dark:text-gray-100">Хуудас олдсонгүй</h1>
+    <p class="mt-4 mb-8 max-w-md text-gray-600 dark:text-gray-400">
+      Таны хайсан хуудас байхгүй эсвэл хаяг нь өөрчлөгдсөн байна.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="/" class="px-5 py-2.5 rounded-lg bg-gray-600 dark:bg-gray-700 text-white hover:bg-gray-700 dark:hover:bg-gray-600 transition">
+        Нүүр хуудас
+      </a>
+      <a href="/articles/" class="px-5 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+        Бүх нийтлэлүүд
+      </a>
+    </div>
+
+    <div class="mt-10 w-full max-w-xl">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-3">Ангиллууд</h2>
+      <div class="flex flex-wrap justify-center gap-2">
+        {categories.map((category) => (
+          <a
+            href={category.href}
+            class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm"
+          >{category.label}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

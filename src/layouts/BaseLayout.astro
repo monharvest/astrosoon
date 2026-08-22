@@ -8,25 +8,41 @@ const {
   description = 'Итгэл ба амьдралын тухай нийтлэлүүд',
   metaImage,
   robots = 'index,follow',
+  jsonLd,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
+// og:image must be an absolute URL — relative paths are ignored by every
+// social scraper. Falls back to the PWA icon when a page has no image.
+const socialImage = new URL(metaImage ?? '/pwa-512x512.png', Astro.site).href;
 ---
 <html lang="mn" class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" type="application/rss+xml" title="Udaxgui.com" href={new URL('/rss.xml', Astro.site)} />
+
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Udaxgui.com" />
+    <meta property="og:locale" content="mn_MN" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={Astro.url.href} />
-    {metaImage && <meta property="og:image" content={metaImage} />}
-    
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#4b5563" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -35,7 +51,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Udaxgui" />
-    
+
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <ClientRouter />
 

@@ -65,7 +65,10 @@ const aspectRatio = aspectW / aspectH;
 const maxWidth = widths[widths.length - 1];
 const computedHeight = Math.round(maxWidth / aspectRatio);
 ---
-<figure class={`relative overflow-hidden ${klass} ${height ? height : (aspect ? `aspect-[${aspect}]` : '')}`}>
+<figure
+  class={`relative overflow-hidden ${klass} ${height ?? ''}`}
+  style={height ? undefined : `aspect-ratio:${aspectW}/${aspectH}`}
+>
   {isImageMeta ? (
     <Picture
       src={src as ImageMetadata}
@@ -73,6 +76,7 @@ const computedHeight = Math.round(maxWidth / aspectRatio);
       widths={widths}
       sizes={sizes}
       formats={['webp']}
+      fallbackFormat="webp"
       quality={quality}
       class="h-full w-full object-cover"
       loading={loading}

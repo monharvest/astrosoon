@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import CategoryFilter from '../components/CategoryFilter.astro';
 import PostGrid from '../components/PostGrid.astro';
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 
 const posts = await getCollection('posts');
 const sorted = posts.sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate));
@@ -13,13 +14,24 @@ const featured = sorted.find((p) => p.data.featured) ?? sorted[0];
 
 // All posts except the featured hero post
 const remaining = sorted.filter((p) => p.id !== featured.id);
+
+const ogImage = featured.data.heroImage
+  ? (await getImage({ src: featured.data.heroImage, width: 1200, height: 630, format: 'jpeg' })).src
+  : undefined;
 ---
-<BaseLayout title="Udaxgui.com" description="Итгэл, найдвар, хайр — нийтлэлүүд">
+<BaseLayout title="Udaxgui.com — Итгэл ба Амьдрал" description="Итгэл, найдвар, хайр — нийтлэлүүд" metaImage={ogImage}>
   <Fragment slot="header"><Header /></Fragment>
   <Fragment slot="hero"><Hero post={featured} /></Fragment>
 
   <CategoryFilter />
   <PostGrid posts={remaining} showOnePerCategory={true} />
+
+  <div class="mt-10 text-center">
+    <a
+      href="/articles/"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium transition"
+    >Бүх {sorted.length} нийтлэлийг үзэх →</a>
+  </div>
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>

@@ -1,14 +1,22 @@
 ---
-// Category filter component
+import { getCategories } from '../utils/categories';
+
+const { allShowsEverything = false } = Astro.props as { allShowsEverything?: boolean };
+const categories = await getCategories();
+
+const buttonClass =
+  'px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn';
 ---
 
-<div id="category-buttons" class="pt-6 pb-6 flex flex-wrap gap-2 max-w-[1200px] mx-auto pr-4 sm:pr-6">
-  <button id="filter-all" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn active" data-category="all">Бүгд</button>
-  <button id="filter-death-life" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn" data-category="үхэл-ба-амилал">Үхэл ба амилал</button>
-  <button id="filter-good-news" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn" data-category="сайн-мэдээ">Сайн мэдээ</button>
-  <button id="filter-teachings" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn" data-category="сургаалт-зүйрлэлүүд">Сургаалт зүйрлэлүүд</button>
-  <button id="filter-eternal" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn" data-category="мөнх-үгийн-ойлголт">Мөнх үгийн ойлголт</button>
-  <button id="filter-hell" class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 filter-btn" data-category="тамын-тухай">Тамын тухай</button>
+<div
+  id="category-buttons"
+  class="pt-6 pb-6 flex flex-wrap gap-2 max-w-[1200px] mx-auto pr-4 sm:pr-6"
+  data-all-mode={allShowsEverything ? 'all' : 'one-per-category'}
+>
+  <button class={`${buttonClass} active`} data-category="all" aria-pressed="true">Бүгд</button>
+  {categories.map((category) => (
+    <button class={buttonClass} data-category={category.slug} aria-pressed="false">{category.label}</button>
+  ))}
 </div>
 
 <style>
@@ -22,53 +30,51 @@
 </style>
 
 <script>
-  // Initialize: events only — initial visible state is set by SSR in PostGrid
+  // Events only — the initial visible state is rendered server-side by PostGrid.
   function initCategoryFilter() {
+    const container = document.getElementById('category-buttons');
     const filterButtons = document.querySelectorAll('.filter-btn');
     const postCards = document.querySelectorAll('.post-card');
 
-    if (filterButtons.length === 0 || postCards.length === 0) return;
+    if (!container || filterButtons.length === 0 || postCards.length === 0) return;
+
+    // On a page that lists everything, "Бүгд" means every post. On the home
+    // page it means one teaser per category, matching what PostGrid rendered.
+    const allShowsEverything = container.dataset.allMode === 'all';
+
+    const setVisible = (card: Element, visible: boolean) =>
+      card.classList.toggle('hidden', !visible);
 
     filterButtons.forEach(button => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
         const category = (button as HTMLElement).dataset.category;
 
-        // Update active state
-        filterButtons.forEach(btn => btn.classList.remove('active'));
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
         button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
 
         if (category === 'all') {
-          // Show only the first post per category
           const seen = new Set<string>();
           postCards.forEach(card => {
+            if (allShowsEverything) return setVisible(card, true);
             const postCategory = (card as HTMLElement).dataset.category ?? '';
-            if (!seen.has(postCategory)) {
-              seen.add(postCategory);
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
+            setVisible(card, !seen.has(postCategory));
+            seen.add(postCategory);
           });
         } else {
-          // Show all posts in the selected category
           postCards.forEach(card => {
-            const postCategory = (card as HTMLElement).dataset.category;
-            if (postCategory === category) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
+            setVisible(card, (card as HTMLElement).dataset.category === category);
           });
         }
       });
     });
   }
 
-  // Initialize immediately
   initCategoryFilter();
-
-  // Also initialize on page load events
   document.addEventListener('DOMContentLoaded', initCategoryFilter);
   document.addEventListener('astro:page-load', initCategoryFilter);
 </script>

@@ -8,33 +8,43 @@ import { slugify } from '../../utils/slug';
 
 export async function getStaticPaths() {
   const all = await getCollection('posts');
-  const categories = Array.from(new Set(all.map((p) => slugify(p.data.category))));
-  return categories.map((category) => ({ params: { category } }));
+  const byCategory = new Map<string, typeof all>();
+
+  for (const post of all) {
+    const slug = slugify(post.data.category);
+    byCategory.set(slug, [...(byCategory.get(slug) ?? []), post]);
+  }
+
+  const getImageOrder = (p: (typeof all)[number]) => {
+    const match = (p.data.pdfUrl ?? '').match(/(\d+)\.pdf$/);
+    return match ? parseInt(match[1]) : Infinity;
+  };
+
+  return [...byCategory.entries()].map(([category, posts]) => ({
+    params: { category },
+    props: {
+      label: posts[0].data.category,
+      posts: posts.sort((a, b) => {
+        const dateDiff = +new Date(b.data.pubDate) - +new Date(a.data.pubDate);
+        if (dateDiff !== 0) return dateDiff;
+        return getImageOrder(a) - getImageOrder(b);
+      })
+    }
+  }));
 }
 
-const { category } = Astro.params;
-const all = await getCollection('posts');
-const getImageOrder = (p: (typeof all)[number]) => {
-  const match = (p.data.pdfUrl ?? '').match(/(\d+)\.pdf$/);
-  return match ? parseInt(match[1]) : Infinity;
-};
-
-const active = all
-  .filter((p) => slugify(p.data.category) === category)
-  .sort((a, b) => {
-    const dateDiff = +new Date(b.data.pubDate) - +new Date(a.data.pubDate);
-    if (dateDiff !== 0) return dateDiff;
-    return getImageOrder(a) - getImageOrder(b);
-  });
+const { label, posts } = Astro.props;
+const description = `${label} ангиллын ${posts.length} нийтлэл — Udaxgui.com`;
 ---
-<BaseLayout title={`Ангилал: ${category}`}>
+<BaseLayout title={`${label} - Udaxgui.com`} description={description}>
   <Fragment slot="header"><Header /></Fragment>
 
   <div class="my-8">
-    <h1 class="text-2xl font-semibold">Ангилал: {active[0]?.data.category ?? category}</h1>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">{label}</h1>
+    <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">{posts.length} нийтлэл</p>
   </div>
 
-  <PostGrid posts={active} />
+  <PostGrid posts={posts} heading={null} />
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>

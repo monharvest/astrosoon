@@ -3,23 +3,38 @@ import type { CollectionEntry } from 'astro:content';
 import SmartPicture from './SmartPicture.astro';
 import { categoryClasses } from '../utils/categoryStyles';
 import { slugify } from '../utils/slug';
-const { post, index = 0, hidden = false } = Astro.props as { post: CollectionEntry<'posts'>, index?: number, hidden?: boolean };
+
+const {
+  post,
+  index = 0,
+  hidden = false,
+  imageHeight = 'h-48',
+  quality = 50
+} = Astro.props as {
+  post: CollectionEntry<'posts'>;
+  index?: number;
+  hidden?: boolean;
+  imageHeight?: string;
+  quality?: number;
+};
+
 const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
 const fallbackImage = 'https://images.unsplash.com/photo-1517817748490-0c953d85a371?q=80&w=1200&auto=format&fit=crop';
 const imageSrc = post.data.heroImage ?? fallbackImage;
+const href = `/posts/${post.id}/`;
 
 // Convert category to slug for data attribute
 const categorySlug = slugify(post.data.category);
 ---
 <article class={`card h-full flex flex-col overflow-hidden post-card rounded-2xl${hidden ? ' hidden' : ''}`} data-category={categorySlug}>
-  <a href={`/posts/${post.id}`} class="block overflow-hidden">
+  <a href={href} class="block overflow-hidden" tabindex="-1" aria-hidden="true">
     <SmartPicture
       src={imageSrc}
-      alt={post.data.title}
+      alt=""
       widths={[320, 480, 640, 768, 960]}
       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-      height="h-48"
-      quality={50}
+      height={imageHeight}
+      quality={quality}
       loading={index < 3 ? 'eager' : 'lazy'}
       fetchpriority={index === 0 ? 'high' : 'auto'}
       class="rounded-t-xl"
@@ -31,11 +46,14 @@ const categorySlug = slugify(post.data.category);
   </div>
 
   <div class="p-4 flex-1">
-    {post.data.description && <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3">{post.data.description}</p>}
+    <h3 class="text-base font-semibold leading-snug text-slate-900 dark:text-slate-100">
+      <a class="hover:underline underline-offset-2" href={href}>{post.data.title}</a>
+    </h3>
+    {post.data.description && <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">{post.data.description}</p>}
   </div>
 
   <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
     <span>{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</span>
-    <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${post.id}`}>Унших →</a>
+    <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={href} aria-label={`${post.data.title} — унших`}>Унших →</a>
   </div>
 </article>

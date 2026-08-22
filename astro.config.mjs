@@ -9,7 +9,8 @@ export default defineConfig({
   integrations: [
     tailwind(),
     sitemap({
-      filter: (page) => !page.endsWith('/admin/') && !page.endsWith('/offline/'),
+      filter: (page) =>
+        !page.endsWith('/admin/') && !page.endsWith('/offline/') && !page.endsWith('/404/'),
     }),
     critters({
       preload: 'swap',
@@ -22,7 +23,7 @@ export default defineConfig({
       mode: 'production',
       base: '/',
       scope: '/',
-      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt', 'pdfs/**/*.pdf'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt'],
       registerType: 'autoUpdate',
       manifest: {
         name: 'Udaxgui.com - Итгэл ба Амьдрал',
@@ -59,7 +60,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2,pdf}'],
+        // PDFs are deliberately excluded — precaching all 42 pushed ~16 MB
+        // onto every first visit. They are cached on demand instead, below.
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
         navigateFallbackDenylist: [/\.pdf$/],
         runtimeCaching: [
           {
@@ -113,6 +116,21 @@ export default defineConfig({
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
               },
+            },
+          },
+          {
+            urlPattern: /\.pdf$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pdf-cache',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 90, // 90 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              rangeRequests: true,
             },
           },
           {

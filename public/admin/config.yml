@@ -3,8 +3,8 @@ backend:
 
 local_backend: true
 
-media_folder: "public/posts"
-public_folder: "/posts"
+media_folder: "src/assets/posts"
+public_folder: "/src/assets/posts"
 
 collections:
   - name: posts
@@ -50,8 +50,11 @@ collections:
       - label: Зураг
         name: heroImage
         widget: image
-        media_folder: "../../../public/posts"
-        public_folder: "/posts"
+        # Written into frontmatter relative to the .md file — the collection
+        # schema resolves it with Astro's image() helper, so a /public path
+        # would fail the build.
+        media_folder: "../../assets/posts"
+        public_folder: "../../assets/posts"
         required: false
       - label: Онцлох
         name: featured

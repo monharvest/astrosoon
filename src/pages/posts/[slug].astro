@@ -2,10 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import SmartPicture from '../../components/SmartPicture.astro';
+import PostCard from '../../components/PostCard.astro';
 import { getCollection, render } from 'astro:content';
-import { categoryClasses } from '../../utils/categoryStyles';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
+import { excerpt } from '../../utils/excerpt';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -15,7 +15,33 @@ export async function getStaticPaths() {
 const posts = await getCollection('posts');
 const post = posts.find((p) => p.id === Astro.params.slug)!;
 const { Content } = await render(post);
-const gradient = categoryClasses[post.data.category] ?? categoryClasses.Default;
+
+// Six posts ship without a frontmatter description; fall back to an excerpt
+// so they stop inheriting the generic site-wide one.
+const description = post.data.description ?? excerpt(post.body ?? '');
+
+// og:image needs a real, absolute URL at a sane social aspect ratio.
+const ogImage = post.data.heroImage
+  ? (await getImage({ src: post.data.heroImage, width: 1200, height: 630, format: 'jpeg' })).src
+  : undefined;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description,
+  inLanguage: 'mn',
+  articleSection: post.data.category,
+  datePublished: post.data.pubDate,
+  dateModified: post.data.updatedDate ?? post.data.pubDate,
+  mainEntityOfPage: canonical,
+  url: canonical,
+  ...(post.data.tags?.length ? { keywords: post.data.tags.join(', ') } : {}),
+  ...(ogImage ? { image: new URL(ogImage, Astro.site).href } : {}),
+  author: { '@type': 'Organization', name: 'Udaxgui.com', url: Astro.site?.href },
+  publisher: { '@type': 'Organization', name: 'Udaxgui.com', url: Astro.site?.href }
+};
 
 const getEncodedAssetUrl = (url: string | undefined) => {
   if (!url) return undefined;
@@ -48,13 +74,18 @@ const relatedPosts = posts
   .sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate))
   .slice(0, 3);
 ---
-<BaseLayout title={post.data.title} description={post.data.description} metaImage={post.data.heroImage?.src}>
+<BaseLayout title={`${post.data.title} - Udaxgui.com`} description={description} metaImage={ogImage} jsonLd={jsonLd}>
   <Fragment slot="header"><Header /></Fragment>
 
   <article class="mx-auto max-w-3xl my-10">
     <header class="p-6">
       <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">{post.data.title}</h1>
-      <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</div>
+      <div class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+        <time datetime={post.data.pubDate}>{new Date(post.data.pubDate).toLocaleDateString('mn-MN')}</time>
+        {post.data.updatedDate && post.data.updatedDate !== post.data.pubDate && (
+          <span> · Шинэчилсэн: <time datetime={post.data.updatedDate}>{new Date(post.data.updatedDate).toLocaleDateString('mn-MN')}</time></span>
+        )}
+      </div>
     </header>
 
     {post.data.heroImage && (
@@ -170,40 +201,9 @@ const relatedPosts = posts
     <section class="mx-auto max-w-6xl my-16">
       <h2 class="text-2xl font-semibold mb-8 text-center text-gray-900 dark:text-slate-100">Холбоотой нийтлэлүүд</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {relatedPosts.map((relatedPost, index) => {
-          const relatedGradient = categoryClasses[relatedPost.data.category] ?? categoryClasses.Default;
-          const fallbackImage = 'https://images.unsplash.com/photo-1517817748490-0c953d85a371?q=80&w=1200&auto=format&fit=crop';
-          const imageSrc = relatedPost.data.heroImage ?? fallbackImage;
-          return (
-            <article class="card h-full flex flex-col overflow-hidden post-card rounded-2xl" data-category={relatedPost.data.category}>
-              <a href={`/posts/${relatedPost.id}`} class="block overflow-hidden">
-                <SmartPicture
-                  src={imageSrc}
-                  alt={relatedPost.data.title}
-                  widths={[320, 480, 640]}
-                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-                  height="h-40"
-                  quality={60}
-                  loading={index < 2 ? 'eager' : 'lazy'}
-                  class="rounded-none"
-                />
-              </a>
-
-              <div class={`bg-gradient-to-r ${relatedGradient} p-4 text-white`}>
-                <div class="badge text-xs">{relatedPost.data.category}</div>
-              </div>
-
-              <div class="p-4 flex-1">
-                {relatedPost.data.description && <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">{relatedPost.data.description}</p>}
-              </div>
-
-              <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span>{new Date(relatedPost.data.pubDate).toLocaleDateString('mn-MN')}</span>
-                <a class="text-indigo-600 dark:text-indigo-400 hover:underline" href={`/posts/${relatedPost.id}`}>Унших →</a>
-              </div>
-            </article>
-          );
-        })}
+        {relatedPosts.map((relatedPost, index) => (
+          <PostCard post={relatedPost} index={index} imageHeight="h-40" quality={60} />
+        ))}
       </div>
     </section>
   )}

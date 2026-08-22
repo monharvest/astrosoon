@@ -1,9 +1,17 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import PostCard from './PostCard.astro';
-const { posts, showOnePerCategory = false } = Astro.props as {
+
+const {
+  posts,
+  showOnePerCategory = false,
+  heading = 'Нийтлэлүүд'
+} = Astro.props as {
   posts: CollectionEntry<'posts'>[];
   showOnePerCategory?: boolean;
+  // Pass null when the page already provides its own heading, so the
+  // document keeps a single h1 and no duplicate section title.
+  heading?: string | null;
 };
 
 // Compute initial hidden state server-side so no JS-driven CLS on first paint
@@ -17,7 +25,7 @@ const postsWithVisibility = posts.map((p) => {
 });
 ---
 <section>
-  <h2 class="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Нийтлэлүүд</h2>
+  {heading && <h2 class="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">{heading}</h2>}
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {postsWithVisibility.map(({ post, hidden }, index) => (
       <PostCard post={post} index={index} hidden={hidden} />

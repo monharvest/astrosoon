@@ -8,12 +8,18 @@ import { getCollection } from 'astro:content';
 
 const posts = await getCollection('posts');
 const sorted = posts.sort((a, b) => +new Date(b.data.pubDate) - +new Date(a.data.pubDate));
+const description = `Udaxgui.com дээрх бүх ${sorted.length} нийтлэл — итгэл, найдвар, хайрын тухай.`;
 ---
-<BaseLayout title="Нийтлэлүүд - Udaxgui.com" description="Бүх нийтлэлүүд">
+<BaseLayout title="Бүх нийтлэлүүд - Udaxgui.com" description={description}>
   <Fragment slot="header"><Header /></Fragment>
 
-  <CategoryFilter />
-  <PostGrid posts={sorted} showOnePerCategory={true} />
+  <div class="mt-8">
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Бүх нийтлэлүүд</h1>
+    <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">{sorted.length} нийтлэл</p>
+  </div>
+
+  <CategoryFilter allShowsEverything={true} />
+  <PostGrid posts={sorted} heading={null} />
 
   <Fragment slot="footer"><Footer /></Fragment>
 </BaseLayout>
