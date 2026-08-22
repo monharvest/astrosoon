@@ -1,7 +1,7 @@
 # Project Instructions
 
 ## 1. Prerequisites
-Ensure you have **Node.js** installed (version 18 or higher recommended).
+Ensure you have **Node.js** installed (version 22.12.0 or higher — required by Astro 7).
 
 ## 2. Installation
 Install the project dependencies:
