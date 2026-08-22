@@ -8,7 +8,6 @@ heroImage: ../../assets/posts/khatuusetgelt.webp
 featured: false
 pdfUrl: "/pdfs/khatuu-setgelt-tushmel.pdf"
 ---
-# Хатуу сэтгэлт түшмэл
 
 ## **Хураангуй**
 

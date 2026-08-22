@@ -8,7 +8,6 @@ heroImage: ../../assets/posts/sainsamari.webp
 featured: false
 pdfUrl: "/pdfs/sayn-samari-khun-khen-be.pdf"
 ---
-# Сайн Самари хүн чухам хэн бэ?
 
 ## **Хураангуй**
 

@@ -8,7 +8,6 @@ heroImage: ../../assets/posts/olive.webp
 featured: false
 pdfUrl: "/pdfs/olivny-mod.pdf"
 ---
-# Христийн Бие Израилд залгагдсан мөчир мөн үү?
 
 ## Хураангуй
 
