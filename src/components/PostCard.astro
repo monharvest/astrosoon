@@ -27,10 +27,10 @@ const href = `/posts/${post.id}/`;
 const categorySlug = slugify(post.data.category);
 ---
 <article class={`card h-full flex flex-col overflow-hidden post-card rounded-2xl${hidden ? ' hidden' : ''}`} data-category={categorySlug}>
-  <a href={href} class="block overflow-hidden" tabindex="-1" aria-hidden="true">
+  <a href={href} class="block overflow-hidden">
     <SmartPicture
       src={imageSrc}
-      alt=""
+      alt={post.data.title}
       widths={[320, 480, 640, 768, 960]}
       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
       height={imageHeight}
@@ -46,10 +46,7 @@ const categorySlug = slugify(post.data.category);
   </div>
 
   <div class="p-4 flex-1">
-    <h3 class="text-base font-semibold leading-snug text-slate-900 dark:text-slate-100">
-      <a class="hover:underline underline-offset-2" href={href}>{post.data.title}</a>
-    </h3>
-    {post.data.description && <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">{post.data.description}</p>}
+    {post.data.description && <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3">{post.data.description}</p>}
   </div>
 
   <div class="px-4 pb-4 mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
