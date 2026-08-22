@@ -64,10 +64,18 @@ const [aspectW, aspectH] = aspect.split('/').map(Number);
 const aspectRatio = aspectW / aspectH;
 const maxWidth = widths[widths.length - 1];
 const computedHeight = Math.round(maxWidth / aspectRatio);
+
+// A local image carries its own width/height, which reserves layout space
+// without help — so let it keep its natural shape instead of cropping it to
+// an arbitrary ratio. The `height` prop still opts into a fixed, cropped box
+// (the card grid wants uniform tiles), and remote images keep the ratio box
+// because their dimensions are not known at build time.
+const cropToBox = Boolean(height) || !isImageMeta;
+const imgClass = cropToBox ? 'h-full w-full object-cover' : 'w-full h-auto';
 ---
 <figure
   class={`relative overflow-hidden ${klass} ${height ?? ''}`}
-  style={height ? undefined : `aspect-ratio:${aspectW}/${aspectH}`}
+  style={cropToBox && !height ? `aspect-ratio:${aspectW}/${aspectH}` : undefined}
 >
   {isImageMeta ? (
     <Picture
@@ -78,7 +86,7 @@ const computedHeight = Math.round(maxWidth / aspectRatio);
       formats={['webp']}
       fallbackFormat="webp"
       quality={quality}
-      class="h-full w-full object-cover"
+      class={imgClass}
       loading={loading}
       decoding="async"
       fetchpriority={fetchpriority}
@@ -90,7 +98,7 @@ const computedHeight = Math.round(maxWidth / aspectRatio);
       <img
         src={unsplashFallback}
         alt={alt}
-        class="h-full w-full object-cover"
+        class={imgClass}
         loading={loading}
         decoding="async"
         fetchpriority={fetchpriority}
@@ -102,7 +110,7 @@ const computedHeight = Math.round(maxWidth / aspectRatio);
     <img
       src={src as string}
       alt={alt}
-      class="h-full w-full object-cover"
+      class={imgClass}
       loading={loading}
       decoding="async"
       fetchpriority={fetchpriority}
