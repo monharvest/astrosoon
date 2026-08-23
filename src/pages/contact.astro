@@ -3,26 +3,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// TODO(content): when the real text is in place, delete `robots` below AND
-// remove '/contact/' from the sitemap filter in astro.config.mjs so the page
-// starts getting indexed.
+const email = 'info@udaxgui.com';
 ---
 <BaseLayout
   title="Холбоо барих - Udaxgui.com"
-  description="Udaxgui.com-той холбоо барих."
-  robots="noindex,follow"
+  description="Udaxgui.com-той холбоо барих. Асуулт, санал бодлоо info@udaxgui.com хаягаар илгээнэ үү."
 >
   <Fragment slot="header"><Header /></Fragment>
 
   <article class="mx-auto max-w-3xl my-12">
     <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">Холбоо барих</h1>
 
-    <div class="prose prose-slate dark:prose-invert mt-6 max-w-none">
-      {/* TODO(content): replace everything inside this div with your own text. */}
-      <p class="text-slate-600 dark:text-slate-400">
-        Энэ хуудасны агуулга удахгүй нэмэгдэнэ.
+    <div class="prose prose-slate dark:prose-invert mt-8 max-w-none">
+      <p>
+        Манай сайтад тавтай морилно уу! Хэрэв бидэнд асуулт тавих, санал бодлоо
+        хуваалцах эсвэл холбоо барихыг хүсвэл имэйл бичээрэй:
       </p>
     </div>
+
+    <p class="mt-6">
+      <a
+        href={`mailto:${email}`}
+        class="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-lg font-medium transition"
+      >
+        <span aria-hidden="true">✉️</span>
+        <span>{email}</span>
+      </a>
+    </p>
   </article>
 
   <Fragment slot="footer"><Footer /></Fragment>

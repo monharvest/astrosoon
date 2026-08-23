@@ -9,14 +9,8 @@ export default defineConfig({
   integrations: [
     tailwind(),
     sitemap({
-      // '/about/' and '/contact/' are placeholders carrying robots=noindex.
-      // Drop them from this list once their real content is written.
       filter: (page) =>
-        !page.endsWith('/admin/') &&
-        !page.endsWith('/offline/') &&
-        !page.endsWith('/404/') &&
-        !page.endsWith('/about/') &&
-        !page.endsWith('/contact/'),
+        !page.endsWith('/admin/') && !page.endsWith('/offline/') && !page.endsWith('/404/'),
     }),
     critters({
       preload: 'swap',
