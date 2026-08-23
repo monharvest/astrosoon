@@ -7,7 +7,10 @@ const email = 'info@udaxgui.com';
 ---
 <BaseLayout
   title="Холбоо барих - Udaxgui.com"
-  description="Udaxgui.com-той холбоо барих. Асуулт, санал бодлоо info@udaxgui.com хаягаар илгээнэ үү."
+  {/* Deliberately no address here: Cloudflare obfuscates it in the body,
+      and repeating it in meta tags would hand it straight to scrapers and
+      surface it in search snippets. */}
+  description="Udaxgui.com-той холбоо барих. Библийн судалгаа, нийтлэлүүдийн талаарх асуулт, саналаа имэйлээр илгээнэ үү."
 >
   <Fragment slot="header"><Header /></Fragment>
 
