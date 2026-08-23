@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// TODO(content): when the real text is in place, delete `robots` below AND
+// remove '/about/' from the sitemap filter in astro.config.mjs so the page
+// starts getting indexed.
+---
+<BaseLayout
+  title="Тухай - Udaxgui.com"
+  description="Udaxgui.com сайтын тухай."
+  robots="noindex,follow"
+>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <article class="mx-auto max-w-3xl my-12">
+    <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">Тухай</h1>
+
+    <div class="prose prose-slate dark:prose-invert mt-6 max-w-none">
+      {/* TODO(content): replace everything inside this div with your own text. */}
+      <p class="text-slate-600 dark:text-slate-400">
+        Энэ хуудасны агуулга удахгүй нэмэгдэнэ.
+      </p>
+    </div>
+  </article>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

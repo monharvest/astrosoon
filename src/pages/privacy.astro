@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Every statement here is derived from the code, not boilerplate:
+// no analytics or tracking scripts exist in src/ or public/; the only
+// localStorage keys are 'theme' and 'pwa-prompt-dismissed-time'; fonts are
+// self-hosted in public/fonts; no public page loads a third-party script.
+// If any of that changes, update this page.
+const updated = '2026 оны 8 сарын 23';
+---
+<BaseLayout
+  title="Нууцлалын бодлого - Udaxgui.com"
+  description="Udaxgui.com ямар мэдээлэл ашигладаг, ашигладаггүй тухай тайлбар."
+>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <article class="mx-auto max-w-3xl my-12">
+    <h1 class="text-3xl font-semibold text-gray-900 dark:text-slate-100">Нууцлалын бодлого</h1>
+    <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">Сүүлд шинэчилсэн: {updated}</p>
+
+    <div class="prose prose-slate dark:prose-invert mt-8 max-w-none">
+      <h2>Хувийн мэдээлэл цуглуулдаггүй</h2>
+      <p>
+        Энэ сайт бол статик вэб хуудас юм. Бүртгэл үүсгэх, нэвтрэх, маягт бөглөх
+        хэсэг байхгүй тул таны нэр, и-мэйл хаяг зэрэг хувийн мэдээллийг
+        цуглуулдаггүй.
+      </p>
+
+      <h2>Хяналт, сурталчилгааны хэрэгсэл байхгүй</h2>
+      <p>
+        Сайтад Google Analytics болон хэрэглэгчийн зан төлөв хянадаг өөр ямар ч
+        код суулгаагүй. Сурталчилгааны cookie ашигладаггүй.
+      </p>
+
+      <h2>Таны төхөөрөмж дээр хадгалагдах зүйл</h2>
+      <p>Сайт таны хөтөч дотор дараах хоёр зүйлийг хадгална:</p>
+      <ul>
+        <li><code>theme</code> — гэрэл эсвэл харанхуй горимын сонголт</li>
+        <li><code>pwa-prompt-dismissed-time</code> — «Апп суулгах» мэдэгдлийг хаасан огноо</li>
+      </ul>
+      <p>
+        Эдгээр нь зөвхөн таны төхөөрөмж дээр үлдэх бөгөөд бидэн рүү илгээгддэггүй.
+        Хөтчийнхөө тохиргооноос хэдийд ч устгаж болно.
+      </p>
+
+      <h2>Оффлайн ашиглалт</h2>
+      <p>
+        Сайт нь Progressive Web App (PWA) бөгөөд таны үзсэн хуудас, зургийг
+        төхөөрөмж дээр кэшлэн хадгалдаг. Ингэснээр интернэт холболтгүй үед ч
+        уншиж болно. Энэ өгөгдөл таны төхөөрөмжөөс гардаггүй.
+      </p>
+
+      <h2>Хостинг</h2>
+      <p>
+        Сайтыг Cloudflare Pages дээр байршуулсан. Бусад вэб серверийн нэгэн адил
+        техникийн шаардлагаар хандалтын лог (IP хаяг, хөтчийн төрөл, хандсан
+        хугацаа) үүсдэг. Эдгээр нь тухайн үйлчилгээ үзүүлэгчийн мэдэлд байх
+        бөгөөд түүний нууцлалын бодлогод захирагдана.
+      </p>
+
+      <h2>Гуравдагч этгээдийн скрипт</h2>
+      <p>
+        Нийтэд нээлттэй хуудсууд гуравдагч этгээдийн скрипт ачаалдаггүй. Үсгийн
+        фонтыг сайт дээрээ байршуулсан тул гадны сервер рүү хүсэлт илгээдэггүй.
+      </p>
+
+      <h2>Өөрчлөлт</h2>
+      <p>Энэ бодлогод өөрчлөлт орвол энэ хуудсыг шинэчилнэ.</p>
+    </div>
+  </article>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>
